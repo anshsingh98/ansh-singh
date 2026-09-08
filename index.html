@@ -1,107 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ansh Singh Corner</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ansh Singh Corner — Coming Soon</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0c1017;
+      color: #f1f5f9;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 520px;
+      background: #151c28;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 3rem 2rem;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #06b6d4;
+      background: rgba(6, 182, 212, 0.12);
+      border: 1px solid rgba(6, 182, 212, 0.25);
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: #94a3b8;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .footer-note {
+      font-size: 0.85rem;
+      color: #64748b;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 1.5rem;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-
-    <!-- Header Navigation -->
-    <nav>
-      <a href="index.html" class="brand">Ansh Singh <span>Corner</span></a>
-      <div class="nav-links">
-        <a href="index.html" class="active">Home</a>
-        <a href="favorites.html">All Favorites</a>
-        <a href="deep-source.html" class="btn-pill">DEEP SOURCE &rarr;</a>
-      </div>
-    </nav>
-
-    <!-- Welcome Hero -->
-    <header class="hero">
-      <div class="tag-badge">Personal Website &bull; 14 y/o Maker</div>
-      <h1>Hey, I'm Ansh Singh.</h1>
-      <p class="intro-text">
-        Welcome to my personal place on the web! Most of this site is just about me—the movies I love watching, the music I play on repeat, and the stuff I like doing. A small part of it is also where I share the software tools I build for fun.
-      </p>
-    </header>
-
-    <!-- Virtual Studio Info -->
-    <section class="section">
-      <div class="card">
-        <h3>🏢 Deepika App Developers</h3>
-        <p>
-          This is my virtual studio name. Whenever I create an app, game, or tool, I put it out under the name <strong>Deepika App Developers</strong>. It's my own space for making cool, clean, and private apps.
-        </p>
-      </div>
-    </section>
-
-    <!-- Sneak Peek: Favorites (Only 2-3 items shown) -->
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title">A Quick Look at What I Like</h2>
-        <a href="favorites.html" class="see-more-link">See all 10 &rarr;</a>
-      </div>
-
-      <div class="grid-2">
-        <!-- Top 3 Movies Preview -->
-        <div class="card">
-          <h3>🎬 Top Movies</h3>
-          <ul class="preview-list">
-            <li><span>Interstellar</span> <span class="subtext">Sci-Fi</span></li>
-            <li><span>Inception</span> <span class="subtext">Thriller</span></li>
-            <li><span>The Dark Knight</span> <span class="subtext">Action</span></li>
-          </ul>
-        </div>
-
-        <!-- Top 3 Songs Preview -->
-        <div class="card">
-          <h3>🎧 Music on Loop</h3>
-          <ul class="preview-list">
-            <li><span>Favorite Song 1</span> <span class="subtext">Artist</span></li>
-            <li><span>Favorite Song 2</span> <span class="subtext">Artist</span></li>
-            <li><span>Favorite Song 3</span> <span class="subtext">Artist</span></li>
-          </ul>
-        </div>
-      </div>
-
-      <div style="text-align: center; margin-top: 1.5rem;">
-        <a href="favorites.html" class="btn-pill" style="display: inline-block;">Check Out My Full Lists of Favorites &rarr;</a>
-      </div>
-    </section>
-
-    <!-- Life & School Snippet -->
-    <section class="section">
-      <div class="section-head">
-        <h2 class="section-title">School & Future</h2>
-      </div>
-      <div class="card">
-        <h3>14, School Student & Learning Every Day</h3>
-        <p>
-          Right now I'm balancing school studies while learning computer programming on my own. My goal is to finish school strong, study computer science, and build software that helps people around the world.
-        </p>
-      </div>
-    </section>
-
-    <!-- Coding Showcase Teaser -->
-    <section class="section">
-      <div class="banner-card">
-        <h3>Looking for the code?</h3>
-        <p style="margin-top: 0.5rem; color: var(--text-muted);">
-          I open-source my projects so anyone can inspect them, learn from them, or use them. Check out <strong>DEEP SOURCE</strong> to see all source codes, starting with Deep Clouds.
-        </p>
-        <div class="link-buttons">
-          <a href="deep-source.html" class="btn-pill">Visit DEEP SOURCE &rarr;</a>
-        </div>
-      </div>
-    </section>
-
-    <footer>
-      <p>&copy; Ansh Singh &bull; Deepika App Developers &bull; Thanks for dropping by!</p>
-    </footer>
-
+    <div class="tag">Under Construction</div>
+    <h1>Ansh Singh Corner</h1>
+    <p>
+      Taking a pause to rethink the vision and build something better. We'll be back once the plan is dialed in.
+    </p>
+    <div class="footer-note">
+      &copy; Deepika App Developers &bull; Check back soon
+    </div>
   </div>
 </body>
 </html>
