@@ -1,1 +1,17 @@
 .extra-content-section{padding-top:92px;padding-bottom:92px;border-top:1px solid var(--line)}.extra-content-grid{display:grid;grid-template-columns:1fr 1fr;gap:10%;margin-top:45px;align-items:center}.extra-content-grid h2{font-size:clamp(38px,5vw,70px);line-height:1;letter-spacing:-3px;margin:0}.extra-content-grid p{color:var(--muted);line-height:1.8;max-width:430px}.extra-content-grid img{width:100%;max-height:360px;object-fit:cover;grid-column:2}.extra-content-grid img+p{grid-column:1;grid-row:1}.admin-link{font-size:10px;opacity:.55}.admin-link:hover{opacity:1}@media(max-width:760px){.extra-content-section{padding-top:70px;padding-bottom:70px}.extra-content-grid{grid-template-columns:1fr;gap:12px;margin-top:30px}.extra-content-grid img,.extra-content-grid img+p{grid-column:auto;grid-row:auto}}
+/* ==== INTRO OVERLAY: plays once before the page reveals ==== */
+.intro-overlay{position:fixed;inset:0;z-index:999;background:var(--ink);display:grid;place-items:center;pointer-events:none;animation:introLift .8s cubic-bezier(.76,0,.24,1) 1.25s forwards}
+.intro-overlay.is-done{animation:introLift .7s cubic-bezier(.76,0,.24,1) forwards}
+.intro-inner{display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center;padding:0 24px}
+.intro-mark{width:74px;height:74px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font:500 22px 'DM Mono',monospace;animation:introPop .55s cubic-bezier(.22,1.2,.36,1) both}
+.intro-name{color:var(--paper);font:italic 600 26px 'Playfair Display',serif;animation:introRise .6s .15s cubic-bezier(.22,.61,.36,1) both}
+.intro-name em{color:var(--yellow);font-style:italic}
+.intro-tag{color:#8d8982;font:500 10px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:2.5px;animation:introRise .6s .3s cubic-bezier(.22,.61,.36,1) both}
+.intro-bar{width:190px;height:2px;background:#45433f;overflow:hidden;border-radius:2px}
+.intro-bar i{display:block;height:100%;background:var(--red);transform-origin:left;transform:scaleX(0);animation:introFill 1s .2s cubic-bezier(.22,.61,.36,1) forwards}
+@keyframes introLift{to{transform:translateY(-101%);visibility:hidden}}
+@keyframes introPop{from{transform:scale(0) rotate(-16deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+@keyframes introRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes introFill{to{transform:scaleX(1)}}
+@media(max-width:480px){.intro-name{font-size:20px}.intro-mark{width:60px;height:60px;font-size:18px}}
+@media(prefers-reduced-motion:reduce){.intro-overlay{display:none}}

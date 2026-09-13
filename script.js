@@ -31,6 +31,24 @@ const escapeHtml = (value = '') => String(value).replace(/[&<>'"]/g, (char) => (
 const resolvePath = (obj, path) => path.split('.').reduce((o, key) => (o ? o[key] : undefined), obj);
 
 // Plain single-line editable texts
+// ==== Intro overlay: plays once per session before the page reveals ====
+(function initIntroOverlay() {
+  const overlay = document.getElementById('introOverlay');
+  if (!overlay) return;
+  const finish = () => {
+    if (!overlay.isConnected) return;
+    overlay.classList.add('is-done');
+    setTimeout(() => overlay.remove(), 950);
+  };
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { overlay.remove(); return; }
+  try {
+    if (sessionStorage.getItem('introShown')) { overlay.remove(); return; }
+    sessionStorage.setItem('introShown', '1');
+  } catch (error) { /* private mode: just play it */ }
+  window.setTimeout(finish, 1300);      // matches the CSS build-up timing
+  window.setTimeout(() => { if (overlay.isConnected) finish(); }, 3000); // absolute safety net
+})();
+
 function applyDataTexts(content) {
   document.querySelectorAll('[data-text]').forEach((el) => {
     const value = resolvePath(content, el.dataset.text);
@@ -69,7 +87,7 @@ function renderSite(content) {
   applyDataTexts(content);
   applyDataHeadings(content);
   buildTicker(content);
-  const profile = { email: '', name: 'Ansh', intro: '', currently: 'figuring it out', photo: '', aboutParagraphs: ['', ''], skills: [], ...(content.profile || {}) };
+  const profile = { email: '', whatsapp: '', name: 'Ansh', intro: '', currently: 'figuring it out', photo: '', aboutParagraphs: ['', ''], skills: [], ...(content.profile || {}) };
   const brand = { companyName: 'Deepika App Developers', shortName: 'DAD', companyEmail: '', ownerLabel: 'Founder & owner', founded: '2026', description: '', tagline: '', ...(content.brand || {}) };
   const site = content.site || { name: "Ansh Singh's Corner", shortName: 'AS', title: "Ansh Singh's Corner" };
   const copy = content.pageCopy || {};
@@ -85,6 +103,8 @@ function renderSite(content) {
   }
 
   document.querySelectorAll('[data-email-link]').forEach((link) => { link.href = `mailto:${profile.email}`; });
+  const waNumber = String(profile.whatsapp || '').replace(/[^0-9]/g, '');
+  document.querySelectorAll('[data-whatsapp-link]').forEach((link) => { if (waNumber) link.href = `https://wa.me/${waNumber}`; });
   document.querySelectorAll('[data-company-email-link]').forEach((link) => { link.href = `mailto:${brand.companyEmail}`; });
   document.querySelectorAll('[data-brand-short]').forEach((el) => { el.textContent = brand.shortName; });
   document.querySelectorAll('[data-brand-name]').forEach((el) => { el.textContent = brand.companyName; });
