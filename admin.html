@@ -9,9 +9,22 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" /><link rel="stylesheet" href="admin.css" />
 </head>
-<body class="admin-page">
+<body class="admin-page admin-locked">
   <div class="admin-shell">
-    <header class="admin-header"><a class="wordmark" href="index.html"><span>DAD</span><strong>Deepika App Developers</strong></a><a class="admin-preview" href="index.html">View website ↗</a></header>
+    <header class="admin-header"><a class="wordmark" href="index.html"><span>DAD</span><strong>Deepika App Developers</strong></a><div class="admin-header-actions"><button class="admin-logout" id="logout-button" type="button">Lock admin</button><a class="admin-preview" href="index.html">View website ↗</a></div></header>
+    <section class="admin-login" id="admin-login" aria-labelledby="admin-login-title">
+      <div class="admin-login-card">
+        <p class="eyebrow"><span class="dot"></span> restricted area</p>
+        <h1 id="admin-login-title">Welcome<br><em>back.</em></h1>
+        <p>Sign in to edit the Deepika App Developers website.</p>
+        <form id="login-form" autocomplete="off">
+          <label>Username<input id="login-username" name="username" autocomplete="username" required /></label>
+          <label>Password<input id="login-password" name="password" type="password" autocomplete="current-password" required /></label>
+          <button class="admin-button admin-button-primary" type="submit">Unlock editor <span>↗</span></button>
+          <p class="login-error" id="login-error" role="alert" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
     <main class="admin-main">
       <div class="admin-intro"><p class="eyebrow"><span class="dot"></span> private workspace</p><h1>Make it <em>yours.</em></h1><p>Edit your website visually. Changes are saved in this browser and appear on every page immediately after refresh.</p></div>
       <div class="admin-toolbar"><button class="admin-button admin-button-primary" id="save-button">Save all changes</button><button class="admin-button" id="reset-button">Reset starter content</button><button class="admin-button" id="export-button">Export backup</button><label class="admin-button file-button">Import backup<input type="file" id="import-input" accept="application/json" /></label><span id="save-status" role="status"></span></div>

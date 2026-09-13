@@ -1,3 +1,38 @@
+const ADMIN_USERNAME = 'ANSHSINGH7861';
+const ADMIN_PASSWORD = 'ANSHSINGH7861923886';
+const ADMIN_SESSION_KEY = 'ansh-admin-unlocked';
+const loginForm = document.querySelector('#login-form');
+const loginError = document.querySelector('#login-error');
+const loginGate = document.querySelector('#admin-login');
+const logoutButton = document.querySelector('#logout-button');
+
+function setAdminAccess(isUnlocked) {
+  document.body.classList.toggle('admin-locked', !isUnlocked);
+  document.body.classList.toggle('admin-unlocked', isUnlocked);
+  if (loginGate) loginGate.hidden = isUnlocked;
+}
+
+setAdminAccess(sessionStorage.getItem(ADMIN_SESSION_KEY) === 'true');
+
+loginForm?.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const username = document.querySelector('#login-username').value;
+  const password = document.querySelector('#login-password').value;
+  if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    sessionStorage.setItem(ADMIN_SESSION_KEY, 'true');
+    loginError.textContent = '';
+    loginForm.reset();
+    setAdminAccess(true);
+    return;
+  }
+  loginError.textContent = 'Username or password is incorrect.';
+});
+
+logoutButton?.addEventListener('click', () => {
+  sessionStorage.removeItem(ADMIN_SESSION_KEY);
+  setAdminAccess(false);
+});
+
 const starterContent = JSON.parse(JSON.stringify(window.siteContent));
 let workingContent = JSON.parse(JSON.stringify(window.siteContent));
 const form = document.querySelector('#admin-form');
