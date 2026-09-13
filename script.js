@@ -210,3 +210,39 @@ document.querySelector('.play-button')?.addEventListener('click', (event) => {
   button.querySelector('.play-icon').textContent = button.classList.contains('is-playing') ? 'Ⅱ' : '▶';
   button.lastChild.textContent = button.classList.contains('is-playing') ? ' Playing now' : ' Play this one';
 });
+
+// Scroll-reveal animations: fade elements in as they enter the viewport.
+// Elements marked .reveal in HTML are observed; otherwise we auto-tag the
+// main layout blocks so every section animates in without manual markup.
+(function initScrollReveal() {
+  let els = Array.from(document.querySelectorAll('.reveal'));
+  if (!els.length) {
+    const selectors = [
+      '.hero-copy > *', '.hero-art', '.intro-grid', '.section-heading',
+      '.company-intro', '.company-description', '.company-meta', '.project-card',
+      '.feature-music', '.list-header', '.track-row', '.film-grid', '.film-card',
+      '.work-grid', '.skills', '.work-intro', '.footer-top', '.footer-bottom',
+      '.music-feature-copy', '.favourite-link', '.subpage-hero', '.favourites-links'
+    ];
+    els = Array.from(document.querySelectorAll(selectors.join(',')));
+    els.forEach((el, i) => {
+      el.classList.add('reveal');
+      if (i % 3 === 1) el.classList.add('reveal-delay');
+      else if (i % 3 === 2) el.style.animationDelay = '.32s';
+    });
+  }
+  if (!els.length) return;
+  if (!('IntersectionObserver' in window)) {
+    els.forEach((el) => el.classList.add('is-visible'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  els.forEach((el) => io.observe(el));
+})();
