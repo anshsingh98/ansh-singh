@@ -225,7 +225,13 @@ document.querySelector('.play-button')?.addEventListener('click', (event) => {
   ].join(',');
   const tagAll = () => {
     document.querySelectorAll(selectors).forEach((el) => {
-      if (!el.classList.contains('reveal')) el.classList.add('reveal');
+      if (el.classList.contains('reveal')) return;
+      el.classList.add('reveal');
+      const siblings = Array.from(el.parentElement ? el.parentElement.children : [])
+        .filter((c) => c.classList.contains('reveal'));
+      const idx = siblings.indexOf(el);
+      if (idx > 0) el.style.transitionDelay = Math.min(idx * 70, 420) + 'ms';
+      el.addEventListener('transitionend', () => { el.style.transitionDelay = ''; }, { once: true });
     });
   };
   tagAll();
@@ -254,5 +260,44 @@ document.querySelector('.play-button')?.addEventListener('click', (event) => {
     });
   }, 1400);
   // Absolute fallback: never leave content hidden
+
+// ==== Ambient parallax: hero art, stamp and scribble drift as you scroll ====
+(function initParallax() {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const art = document.querySelector('.hero-art');
+  const stamp = document.querySelector('.hero-stamp');
+  const scribble = document.querySelector('.scribble');
+  if (!art && !stamp && !scribble) return;
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const y = window.scrollY;
+      if (art) art.style.translate = `0 ${y * 0.06}px`;
+      if (scribble) scribble.style.translate = `0 ${y * -0.09}px`;
+      if (stamp) stamp.style.translate = `0 ${y * 0.12}px`;
+      ticking = false;
+    });
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+// ==== Mouse tilt: portrait gently follows the cursor on desktop ====
+(function initTilt() {
+  if (!window.matchMedia || !window.matchMedia('(pointer: fine)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const frame = document.querySelector('.portrait-frame');
+  const wrap = frame ? frame.parentElement : null;
+  if (!frame || !wrap) return;
+  wrap.addEventListener('mousemove', (e) => {
+    const r = wrap.getBoundingClientRect();
+    const dx = (e.clientX - r.left) / r.width - 0.5;
+    const dy = (e.clientY - r.top) / r.height - 0.5;
+    frame.style.transform = `rotate(3deg) translate(${(dx * 12).toFixed(1)}px, ${(dy * 12).toFixed(1)}px)`;
+  });
+  wrap.addEventListener('mouseleave', () => { frame.style.transform = ''; });
+})();
   setTimeout(revealAll, 4000);
 })();
