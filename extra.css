@@ -50,3 +50,18 @@
 @media(prefers-reduced-motion:reduce){.mini-player{transition:none}.mini-player::before,.mp-art,.mp-eq i,.mp-hint{animation:none!important}}
 body.mp-active{padding-bottom:80px}
 @media(max-width:760px){body.mp-active{padding-bottom:108px}}
+
+/* ==== CURSOR GLOW + CLICK BURST (major ambient animation) ==== */
+.cursor-glow{position:fixed;width:340px;height:340px;border-radius:50%;pointer-events:none;z-index:5;left:0;top:0;opacity:0;transition:opacity .4s;background:radial-gradient(circle,rgba(229,72,46,.14) 0%,rgba(245,197,24,.07) 40%,transparent 70%);transform:translate(-50%,-50%);will-change:left,top}
+body.glow-on .cursor-glow{opacity:1}
+.burst-dot{position:fixed;width:8px;height:8px;border-radius:50%;pointer-events:none;z-index:9998;will-change:transform,opacity;animation:burstFly .7s cubic-bezier(.16,.84,.44,1) forwards}
+@keyframes burstFly{from{transform:translate(-50%,-50%) scale(1);opacity:1}to{transform:translate(calc(-50% + var(--bx)),calc(-50% + var(--by))) scale(.1);opacity:0}}
+.burst-ring{position:fixed;border-radius:50%;pointer-events:none;z-index:9997;border:2px solid var(--yellow);animation:ringPop .55s ease-out forwards}
+@keyframes ringPop{from{opacity:.9;transform:translate(-50%,-50%) scale(.2)}to{opacity:0;transform:translate(-50%,-50%) scale(1.6)}}
+
+/* ==== PLAYER UX HARDENING ==== */
+.mini-player{z-index:200;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+.mp-close{width:34px;height:34px;display:grid;place-items:center;border-radius:50%}
+.mp-toggle{width:46px;height:46px}
+@media(max-width:760px){.mini-player{padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}.mp-close{width:40px;height:40px}}
+@media(prefers-reduced-motion:reduce){.cursor-glow,.burst-dot,.burst-ring{display:none!important}}

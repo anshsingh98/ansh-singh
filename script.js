@@ -433,3 +433,55 @@ syncRemoteContent();
 })();
   setTimeout(revealAll, 4000);
 })();
+// ==== Cursor glow + click particle burst (skipped for touch/reduced motion) ====
+(function initCursorFx() {
+  const coarse = window.matchMedia('(pointer: coarse)').matches;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (coarse || reduced) return;
+
+  const glow = document.createElement('div');
+  glow.className = 'cursor-glow';
+  document.body.appendChild(glow);
+
+  let gx = window.innerWidth / 2, gy = window.innerHeight / 2, tx = gx, ty = gy, active = false;
+  const COLORS = ['#e5482e', '#f5c518', '#1d1d1b'];
+
+  function loop() {
+    gx += (tx - gx) * 0.12;
+    gy += (ty - gy) * 0.12;
+    glow.style.left = gx + 'px';
+    glow.style.top = gy + 'px';
+    requestAnimationFrame(loop);
+  }
+  window.addEventListener('pointermove', (e) => {
+    tx = e.clientX; ty = e.clientY;
+    if (!active) { active = true; document.body.classList.add('glow-on'); }
+  }, { passive: true });
+  requestAnimationFrame(loop);
+
+  function burst(x, y) {
+    const ring = document.createElement('span');
+    ring.className = 'burst-ring';
+    ring.style.left = x + 'px'; ring.style.top = y + 'px';
+    ring.style.width = ring.style.height = '44px';
+    document.body.appendChild(ring);
+    setTimeout(() => ring.remove(), 600);
+    for (let i = 0; i < 9; i++) {
+      const d = document.createElement('span');
+      d.className = 'burst-dot';
+      const ang = (Math.PI * 2 * i) / 9 + Math.random() * 0.6;
+      const dist = 34 + Math.random() * 34;
+      d.style.setProperty('--bx', Math.cos(ang) * dist + 'px');
+      d.style.setProperty('--by', Math.sin(ang) * dist + 'px');
+      d.style.left = x + 'px'; d.style.top = y + 'px';
+      d.style.background = COLORS[i % COLORS.length];
+      d.style.animationDelay = (i % 3) * 0.04 + 's';
+      document.body.appendChild(d);
+      setTimeout(() => d.remove(), 900);
+    }
+  }
+  window.addEventListener('pointerdown', (e) => {
+    if (e.button !== 0) return;
+    burst(e.clientX, e.clientY);
+  }, { passive: true });
+})();
