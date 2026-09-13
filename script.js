@@ -26,8 +26,17 @@ const movieCard = (movie, index) => {
 };
 
 if (content) {
-  const { profile, brand } = content;
+  const { profile, brand, site } = content;
   const copy = content.pageCopy || {};
+  const faviconUrl = new URL('favicon.svg', document.currentScript.src).href;
+  if (!document.querySelector('link[data-site-favicon]')) {
+    const favicon = document.createElement('link');
+    favicon.rel = 'icon';
+    favicon.type = 'image/svg+xml';
+    favicon.href = faviconUrl;
+    favicon.dataset.siteFavicon = 'true';
+    document.head.appendChild(favicon);
+  }
   document.querySelectorAll('[data-email-link]').forEach((link) => {
     link.href = `mailto:${profile.email}`;
   });
@@ -37,8 +46,14 @@ if (content) {
   document.querySelectorAll('[data-brand-short]').forEach((element) => { element.textContent = brand.shortName; });
   document.querySelectorAll('[data-brand-name]').forEach((element) => { element.textContent = brand.companyName; });
   document.querySelectorAll('[data-brand-name-heading]').forEach((element) => { element.innerHTML = brand.companyName.replace(' App Developers', ' App<br><em>Developers.</em>'); });
-  document.querySelectorAll('.wordmark span').forEach((element) => { element.textContent = brand.shortName; });
-  document.querySelectorAll('.wordmark strong').forEach((element) => { element.textContent = brand.companyName; });
+  document.querySelectorAll('.wordmark span').forEach((element) => {
+    element.textContent = '';
+    element.setAttribute('aria-label', site.shortName);
+    element.style.backgroundImage = `url("${faviconUrl}")`;
+    element.style.backgroundSize = 'cover';
+  });
+  document.querySelectorAll('.wordmark strong').forEach((element) => { element.textContent = site.name; });
+  if (site.title && document.body.dataset.page !== 'admin') document.title = site.title;
   document.querySelectorAll('[data-profile-name]').forEach((element) => { element.textContent = `${profile.name}.`; });
   document.querySelectorAll('[data-profile-role]').forEach((element) => { element.textContent = profile.role; });
   document.querySelectorAll('[data-profile-intro]').forEach((element) => { element.textContent = profile.intro; });

@@ -1,5 +1,11 @@
 /* EDIT THIS FILE to personalize the website. Keep the same field names when adding items. */
 window.siteContent = {
+  site: {
+    name: "Ansh Singh's Corner",
+    shortName: 'AS',
+    title: "Ansh Singh's Corner",
+    description: "Ansh Singh's personal corner: code, culture, music, movies, and independent projects."
+  },
   pageCopy: {
     homeAboutLabel: 'THE SHORT VERSION',
     homeAboutHeading: 'I make websites, listen to everything, and stay curious.',
