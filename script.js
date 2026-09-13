@@ -1,5 +1,5 @@
 import { db } from './firebase-config.js';
-import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const menuButton = document.querySelector('.menu-button');
 const nav = document.querySelector('.desktop-nav');
@@ -144,17 +144,22 @@ function renderSite(content) {
 // 1. Render immediate local content first
 renderSite(window.siteContent);
 
-// 2. Fetch live Cloud Firestore content
+// 2. Sync live content from the shared Cloud Firestore database.
+// Content is fetched on page load and re-rendered in real time whenever the
+// admin saves, so every visitor sees the same shared content.
 async function syncRemoteContent() {
   try {
     const docRef = doc(db, 'site', 'content');
-    const snap = await getDoc(docRef);
-    if (snap.exists()) {
-      window.siteContent = { ...window.siteContent, ...snap.data() };
-      renderSite(window.siteContent);
-    }
+    onSnapshot(docRef, (snap) => {
+      if (snap.exists()) {
+        window.siteContent = { ...window.siteContent, ...snap.data() };
+        renderSite(window.siteContent);
+      }
+    }, (error) => {
+      console.warn('Firestore connection failed; using local starter content:', error);
+    });
   } catch (error) {
-    console.warn('Firestore connection failed; running local fallback:', error);
+    console.warn('Firestore connection failed; using local starter content:', error);
   }
 }
 syncRemoteContent();

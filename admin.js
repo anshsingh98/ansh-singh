@@ -127,7 +127,6 @@ document.querySelector('#save-button').addEventListener('click', async () => {
   status.className = '';
   try {
     await setDoc(doc(db, 'site', 'content'), workingContent);
-    localStorage.setItem('ansh-site-content', JSON.stringify(workingContent));
     status.textContent = 'Saved live to cloud!';
     status.className = 'saved-message';
   } catch (err) {
@@ -137,15 +136,14 @@ document.querySelector('#save-button').addEventListener('click', async () => {
 });
 
 document.querySelector('#reset-button').addEventListener('click', async () => {
-  if (!window.confirm('Reset all saved edits to starter content across cloud and local?')) return;
+  if (!window.confirm('Reset all saved edits back to the starter content in the database?')) return;
   workingContent = JSON.parse(JSON.stringify(starterContent));
-  localStorage.removeItem('ansh-site-content');
   try {
     await setDoc(doc(db, 'site', 'content'), workingContent);
     status.textContent = 'Starter content restored on cloud!';
     status.className = 'saved-message';
   } catch (err) {
-    status.textContent = 'Reset locally, but cloud reset failed: ' + err.message;
+    status.textContent = 'Database reset failed: ' + err.message;
   }
   renderAll();
 });

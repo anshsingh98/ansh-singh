@@ -104,29 +104,5 @@ window.siteContent = {
     { title: 'Arrival', director: 'Denis Villeneuve', year: '2016' }
   ]
 };
-
-// Admin edits are saved locally in the browser and override these starter values.
-try {
-  const savedContent = localStorage.getItem('ansh-site-content');
-  if (savedContent) {
-    const saved = JSON.parse(savedContent);
-    const base = window.siteContent;
-    window.siteContent = {
-      ...base,
-      ...saved,
-      pageCopy: { ...base.pageCopy, ...saved.pageCopy },
-      brand: { ...base.brand, ...saved.brand },
-      profile: {
-        ...base.profile,
-        ...saved.profile,
-        skills: saved.profile?.skills || base.profile.skills,
-        aboutParagraphs: saved.profile?.aboutParagraphs || base.profile.aboutParagraphs
-      },
-      projects: saved.projects || base.projects,
-      songs: saved.songs || base.songs,
-      movies: saved.movies || base.movies
-    };
-  }
-} catch (error) {
-  console.warn('Saved site content could not be loaded.', error);
-}
+// Admin edits are stored in the shared cloud database (Firestore) and fetched at
+// runtime by script.js, so changes apply for every visitor — not just this browser.
