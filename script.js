@@ -194,6 +194,7 @@ async function syncRemoteContent() {
       if (snap.exists()) {
         window.siteContent = { ...window.siteContent, ...snap.data() };
         renderSite(window.siteContent);
+        window.__revealRescan && window.__revealRescan();
       }
     }, (error) => {
       console.warn('Firestore connection failed; using local starter content:', error);
@@ -211,38 +212,47 @@ document.querySelector('.play-button')?.addEventListener('click', (event) => {
   button.lastChild.textContent = button.classList.contains('is-playing') ? ' Playing now' : ' Play this one';
 });
 
-// Scroll-reveal animations: fade elements in as they enter the viewport.
-// Elements marked .reveal in HTML are observed; otherwise we auto-tag the
-// main layout blocks so every section animates in without manual markup.
-(function initScrollReveal() {
-  let els = Array.from(document.querySelectorAll('.reveal'));
-  if (!els.length) {
-    const selectors = [
-      '.hero-copy > *', '.hero-art', '.intro-grid', '.section-heading',
-      '.company-intro', '.company-description', '.company-meta', '.project-card',
-      '.feature-music', '.list-header', '.track-row', '.film-grid', '.film-card',
-      '.work-grid', '.skills', '.work-intro', '.footer-top', '.footer-bottom',
-      '.music-feature-copy', '.favourite-link', '.subpage-hero', '.favourites-links'
-    ];
-    els = Array.from(document.querySelectorAll(selectors.join(',')));
-    els.forEach((el, i) => {
-      el.classList.add('reveal');
-      if (i % 3 === 1) el.classList.add('reveal-delay');
-      else if (i % 3 === 2) el.style.animationDelay = '.32s';
+
+// ==== Safe scroll-reveal + micro-animations (guarded by html.js-anim) ====
+(function initAnimations() {
+  document.documentElement.classList.add('js-anim');
+  const selectors = [
+    '.intro-grid', '.section-heading', '.company-intro', '.company-description',
+    '.company-meta', '.project-card', '.feature-music', '.list-header', '.track-row',
+    '.film-card', '.work-intro', '.skills > div', '.footer-top', '.footer-bottom',
+    '.music-feature-copy', '.now-section .company-intro', '.connect-section .section-heading',
+    '.now-section .section-heading', '.top-list'
+  ].join(',');
+  const tagAll = () => {
+    document.querySelectorAll(selectors).forEach((el) => {
+      if (!el.classList.contains('reveal')) el.classList.add('reveal');
     });
+  };
+  tagAll();
+  let io = null;
+  if ('IntersectionObserver' in window) {
+    io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -5% 0px' });
+    window.__revealRescan = () => {
+      tagAll();
+      document.querySelectorAll('.reveal:not(.is-visible)').forEach((el) => io.observe(el));
+    };
   }
-  if (!els.length) return;
-  if (!('IntersectionObserver' in window)) {
-    els.forEach((el) => el.classList.add('is-visible'));
-    return;
-  }
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        io.unobserve(entry.target);
-      }
+  const revealAll = () => document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
+  if (io) window.__revealRescan();
+  else revealAll();
+  // Safety net: anything still hidden after 1.4s that's near the viewport shows anyway
+  setTimeout(() => {
+    document.querySelectorAll('.reveal:not(.is-visible)').forEach((el) => {
+      if (el.getBoundingClientRect().top < window.innerHeight * 1.2) el.classList.add('is-visible');
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
-  els.forEach((el) => io.observe(el));
+  }, 1400);
+  // Absolute fallback: never leave content hidden
+  setTimeout(revealAll, 4000);
 })();
