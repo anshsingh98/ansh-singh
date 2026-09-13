@@ -1,3 +1,6 @@
+import { db } from './firebase-config.js';
+import { doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
 const ADMIN_USERNAME = 'ANSHSINGH7861';
 const ADMIN_PASSWORD = 'ANSHSINGH7861923886';
 const ADMIN_SESSION_KEY = 'ansh-admin-unlocked';
@@ -38,12 +41,12 @@ let workingContent = JSON.parse(JSON.stringify(window.siteContent));
 const form = document.querySelector('#admin-form');
 const status = document.querySelector('#save-status');
 
-const escapeHtml = (value = '') => String(value).replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character]));
-const getValue = (path) => path.split('.').reduce((object, key) => object?.[key], workingContent) ?? '';
+const escapeHtml = (value = '') => String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+const getValue = (path) => path.split('.').reduce((obj, key) => obj?.[key], workingContent) ?? '';
 const setValue = (path, value) => {
   const keys = path.split('.');
   const lastKey = keys.pop();
-  const target = keys.reduce((object, key) => object[key] ??= {}, workingContent);
+  const target = keys.reduce((obj, key) => obj[key] ??= {}, workingContent);
   target[lastKey] = value;
 };
 const field = (label, path, type = 'text') => `<label>${label}<input data-path="${path}" type="${type}" value="${escapeHtml(getValue(path))}" /></label>`;
@@ -57,7 +60,7 @@ function renderSimpleFields() {
 
 function renderRepeater(id, collection, type) {
   const container = document.querySelector(`#${id}`);
-  const items = collection.split('.').reduce((object, key) => object?.[key], workingContent) || [];
+  const items = collection.split('.').reduce((obj, key) => obj?.[key], workingContent) || [];
   const templates = {
     skills: (item, index) => `<article class="repeat-card"><div class="repeat-number">${String(index + 1).padStart(2, '0')}</div><div class="repeat-fields">${field('Skill name', `${collection}.${index}.title`)}${field('Details', `${collection}.${index}.details`)}</div><button type="button" class="remove-button" data-remove="${collection}" data-index="${index}" aria-label="Remove skill">×</button></article>`,
     projects: (item, index) => `<article class="repeat-card"><div class="repeat-number">${String(index + 1).padStart(2, '0')}</div><div class="repeat-fields repeat-fields-three">${field('Project name', `${collection}.${index}.name`)}${field('Category', `${collection}.${index}.category`)}${field('Status', `${collection}.${index}.status`)}${field('Description', `${collection}.${index}.description`)}${field('Colour theme', `${collection}.${index}.color`)}${field('Project link', `${collection}.${index}.link`, 'url')}</div><button type="button" class="remove-button" data-remove="${collection}" data-index="${index}" aria-label="Remove project">×</button></article>`,
@@ -77,14 +80,29 @@ function renderAll() {
   renderRepeater('sections-editor', 'pageCopy.extraSections', 'extraSections');
 }
 
-function collectionAtPath(path) {
-  return path.split('.').reduce((object, key) => object[key], workingContent);
+// Pull cloud content to prepopulate the editor
+async function loadRemoteAdminContent() {
+  status.textContent = 'Checking cloud for saved changes...';
+  try {
+    const snap = await getDoc(doc(db, 'site', 'content'));
+    if (snap.exists()) {
+      workingContent = { ...workingContent, ...snap.data() };
+      renderAll();
+      status.textContent = 'Cloud data synced';
+      status.className = 'saved-message';
+    } else {
+      status.textContent = 'Using initial starter data';
+    }
+  } catch (err) {
+    status.textContent = 'Could not fetch cloud data: ' + err.message;
+  }
 }
 
 form.addEventListener('input', (event) => {
   const input = event.target.closest('[data-path]');
   if (input) setValue(input.dataset.path, input.value);
 });
+
 document.addEventListener('click', (event) => {
   const addButton = event.target.closest('[data-add]');
   if (addButton) {
@@ -104,18 +122,34 @@ document.addEventListener('click', (event) => {
   }
 });
 
-document.querySelector('#save-button').addEventListener('click', () => {
-  localStorage.setItem('ansh-site-content', JSON.stringify(workingContent));
-  status.textContent = 'Saved just now';
-  status.className = 'saved-message';
+document.querySelector('#save-button').addEventListener('click', async () => {
+  status.textContent = 'Saving live to cloud...';
+  status.className = '';
+  try {
+    await setDoc(doc(db, 'site', 'content'), workingContent);
+    localStorage.setItem('ansh-site-content', JSON.stringify(workingContent));
+    status.textContent = 'Saved live to cloud!';
+    status.className = 'saved-message';
+  } catch (err) {
+    status.textContent = 'Cloud save failed: ' + err.message;
+    status.className = 'login-error';
+  }
 });
-document.querySelector('#reset-button').addEventListener('click', () => {
-  if (!window.confirm('Reset all saved edits to the starter content?')) return;
+
+document.querySelector('#reset-button').addEventListener('click', async () => {
+  if (!window.confirm('Reset all saved edits to starter content across cloud and local?')) return;
   workingContent = JSON.parse(JSON.stringify(starterContent));
   localStorage.removeItem('ansh-site-content');
+  try {
+    await setDoc(doc(db, 'site', 'content'), workingContent);
+    status.textContent = 'Starter content restored on cloud!';
+    status.className = 'saved-message';
+  } catch (err) {
+    status.textContent = 'Reset locally, but cloud reset failed: ' + err.message;
+  }
   renderAll();
-  status.textContent = 'Starter content restored';
 });
+
 document.querySelector('#export-button').addEventListener('click', () => {
   const blob = new Blob([JSON.stringify(workingContent, null, 2)], { type: 'application/json' });
   const link = document.createElement('a');
@@ -124,14 +158,22 @@ document.querySelector('#export-button').addEventListener('click', () => {
   link.click();
   URL.revokeObjectURL(link.href);
 });
+
 document.querySelector('#import-input').addEventListener('change', (event) => {
   const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.addEventListener('load', () => {
-    try { workingContent = JSON.parse(reader.result); renderAll(); status.textContent = 'Backup loaded. Save to apply it.'; } catch { status.textContent = 'That backup file is not valid JSON.'; }
+    try {
+      workingContent = JSON.parse(reader.result);
+      renderAll();
+      status.textContent = 'Backup loaded. Click "Save all changes" to push live.';
+    } catch {
+      status.textContent = 'Invalid JSON backup file.';
+    }
   });
   reader.readAsText(file);
 });
 
 renderAll();
+loadRemoteAdminContent();
