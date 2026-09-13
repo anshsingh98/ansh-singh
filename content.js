@@ -19,6 +19,29 @@ window.siteContent = {
     songsIntro: 'The complete list. Update the data file when a new favourite earns a spot.',
     moviesHeading: 'Stories I return to.',
     moviesIntro: 'The complete film cabinet. Add your own favourites in one editable place.',
+    heroSubtitle: 'I build & feel things.',
+    nowLabel: 'THE SHORT VERSION',
+    projectsLabel: 'THE COMPANY / THE PROJECTS',
+    playlistLabel: 'THE SOUNDTRACK',
+    filmsLabel: 'THE FILM CABINET',
+    workLabel: 'THE PROFESSIONAL BIT',
+    nowplayingLabel: "WHAT I'M INTO RIGHT NOW",
+    connectLabel: 'SAY HELLO',
+    playlistNote: 'Top 3 on the homepage.',
+    filmsNote: 'Top 3 on the homepage.',
+    playlistEyebrow: 'On repeat lately',
+    nowplayingNote: 'A little snapshot, right now.',
+    nowplayingEyebrow: 'contact',
+    connectNote: 'Always open.',
+    workHeading: 'Useful things,\nmade well.',
+    workIntro: 'I care about thoughtful interfaces, clean code, and building things people actually enjoy using.',
+    nowplayingHeading: 'Currently\nexploring.',
+    nowplayingText: "Right now I'm deep in a few new experiments — small tools, better code, and a growing list of music and films worth keeping close. The corner grows as I do.",
+    connectHeading: "Let's make\nsomething nice.",
+    connectText: "Whether it's a project, a song, or just a good conversation — my inbox is always open. Reach out and I'll get back to you.",
+    footerHeading: 'Come back\nanytime.',
+    footerText: 'Built with care, curiosity, and too much music.',
+    ticker: ['CODE WITH INTENT', 'LIVE WITH CURIOSITY', 'COLLECT GOOD STORIES'],
     extraSections: []
   },
   brand: {
@@ -28,14 +51,14 @@ window.siteContent = {
     description: 'Deepika App Developers is Ansh Singh\'s independent creative technology company for building useful, curious, and slightly ambitious digital products.',
     ownerLabel: 'Founder & owner',
     founded: '2026',
-    companyEmail: 'hello@deepikaappdevelopers.dev'
+    companyEmail: 'shubh99singh00@gmail.com'
   },
   profile: {
     name: 'Ansh',
     fullName: 'Ansh Singh',
     role: 'Developer, collector of good things',
     intro: 'A developer from India making useful things on the internet, and keeping a record of everything that makes life a little more interesting.',
-    email: 'hello@anshsingh.dev',
+    email: 'shubh99singh00@gmail.com',
     currently: 'figuring it out',
     photo: 'https://i.ibb.co/Z08Cdm1/IMG-20260711-WA0006.jpg',
     aboutHeading: 'I make websites, listen to everything, and stay curious.',
@@ -78,7 +101,7 @@ window.siteContent = {
       link: 'https://deep-ai-dp.vercel.app'
     }
   ],
-  featuredSong: { title: 'Good Days', artist: 'SZA', mood: 'soft reset' },
+  featuredSong: { title: 'Tum Tak', artist: 'Javed Ali, AR Rahman', mood: 'magic', year: '2013' },
   songs: [
     { title: 'Good Days', artist: 'SZA', mood: 'soft reset' },
     { title: '505', artist: 'Arctic Monkeys', mood: 'late night' },

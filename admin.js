@@ -54,7 +54,12 @@ const field = (label, path, type = 'text') => `<label>${label}<input data-path="
 function renderSimpleFields() {
   document.querySelectorAll('[name]').forEach((input) => {
     input.dataset.path = input.name;
-    input.value = getValue(input.name);
+    if (input.name === 'pageCopy.ticker') {
+      const arr = getValue(input.name);
+      input.value = Array.isArray(arr) ? arr.join('\n') : '';
+    } else {
+      input.value = getValue(input.name);
+    }
   });
 }
 
@@ -100,7 +105,12 @@ async function loadRemoteAdminContent() {
 
 form.addEventListener('input', (event) => {
   const input = event.target.closest('[data-path]');
-  if (input) setValue(input.dataset.path, input.value);
+  if (!input) return;
+  if (input.dataset.path === 'pageCopy.ticker') {
+    setValue('pageCopy.ticker', input.value.split('\n').map((s) => s.trim()).filter(Boolean));
+  } else {
+    setValue(input.dataset.path, input.value);
+  }
 });
 
 document.addEventListener('click', (event) => {

@@ -27,8 +27,48 @@ const movieCard = (movie, index) => {
   return `<article class="film-card${featured}">${image}<div class="${featured ? 'film-info' : ''}"><div class="film-number">${String(index + 1).padStart(2, '0')}</div><h3>${movie.title}</h3><p>${details}</p></div>${featured ? '' : '<span class="film-arrow">↗</span>'}</article>`;
 };
 
+const escapeHtml = (value = '') => String(value).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+const resolvePath = (obj, path) => path.split('.').reduce((o, key) => (o ? o[key] : undefined), obj);
+
+// Plain single-line editable texts
+function applyDataTexts(content) {
+  document.querySelectorAll('[data-text]').forEach((el) => {
+    const value = resolvePath(content, el.dataset.text);
+    if (typeof value === 'string') el.textContent = value;
+  });
+}
+
+// Headings stored as plain text ("main\naccent line") -> keeps the two-font accent automatically
+function headingHtml(text) {
+  if (!text) return '';
+  const parts = String(text).split('\n');
+  const first = escapeHtml(parts[0] || '');
+  if (parts.length < 2) return first;
+  const words = (parts[1] || '').trim().split(/\s+/);
+  const accent = escapeHtml(words.pop() || '');
+  const lead = escapeHtml(words.join(' '));
+  return `${first}<br>${lead ? lead + ' ' : ''}<em>${accent}</em>`;
+}
+function applyDataHeadings(content) {
+  document.querySelectorAll('[data-heading]').forEach((el) => {
+    const value = resolvePath(content, el.dataset.heading);
+    if (typeof value === 'string') el.innerHTML = headingHtml(value);
+  });
+}
+
+// Ticker marquee rebuilt from editable phrases
+function buildTicker(content) {
+  const track = document.querySelector('.ticker-track');
+  const phrases = content?.pageCopy?.ticker;
+  if (!track || !Array.isArray(phrases) || !phrases.length) return;
+  track.innerHTML = [...phrases, ...phrases].map((p) => `${escapeHtml(p)}<b>✳</b>`).join('');
+}
+
 function renderSite(content) {
   if (!content) return;
+  applyDataTexts(content);
+  applyDataHeadings(content);
+  buildTicker(content);
   const profile = { email: '', name: 'Ansh', intro: '', currently: 'figuring it out', photo: '', aboutParagraphs: ['', ''], skills: [], ...(content.profile || {}) };
   const brand = { companyName: 'Deepika App Developers', shortName: 'DAD', companyEmail: '', ownerLabel: 'Founder & owner', founded: '2026', description: '', tagline: '', ...(content.brand || {}) };
   const site = content.site || { name: "Ansh Singh's Corner", shortName: 'AS', title: "Ansh Singh's Corner" };
