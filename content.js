@@ -21,7 +21,7 @@ window.siteContent = {
     tagline: 'An imaginary company. Real ideas.',
     description: 'Deepika App Developers is Ansh Singh\'s independent creative technology company for building useful, curious, and slightly ambitious digital products.',
     ownerLabel: 'Founder & owner',
-    founded: '2024',
+    founded: '2026',
     companyEmail: 'hello@deepikaappdevelopers.dev'
   },
   profile: {
