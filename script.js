@@ -225,12 +225,124 @@ async function syncRemoteContent() {
 }
 syncRemoteContent();
 
-document.querySelector('.play-button')?.addEventListener('click', (event) => {
-  const button = event.currentTarget;
-  button.classList.toggle('is-playing');
-  button.querySelector('.play-icon').textContent = button.classList.contains('is-playing') ? 'Ⅱ' : '▶';
-  button.lastChild.textContent = button.classList.contains('is-playing') ? ' Playing now' : ' Play this one';
-});
+// ==== Sticky Spotify-style music player for the featured song ====
+(function initMusicPlayer() {
+  const playButton = document.querySelector('.play-button');
+  if (!playButton) return;
+  const playIcon = playButton.querySelector('.play-icon');
+  let bar = null, audio = null, timeline = null, progress = null, currentEl = null, totalEl = null, toggleBtn = null, hintEl = null, seeking = false;
+
+  const setCardPlaying = (on) => {
+    playButton.classList.toggle('is-playing', on);
+    if (playIcon) playIcon.textContent = on ? 'Ⅱ' : '▶';
+    if (playButton.lastChild) playButton.lastChild.textContent = on ? ' Playing now' : ' Play this one';
+  };
+  const fmt = (s) => {
+    if (!isFinite(s) || s < 0) return '0:00';
+    return Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  };
+  const songSrc = (song) => (song && song.src) ? song.src : 'src/tum-tak.mp3';
+
+  function buildPlayer() {
+    const cover = document.querySelector('.album-cover img');
+    bar = document.createElement('div');
+    bar.className = 'mini-player';
+    bar.setAttribute('role', 'region');
+    bar.setAttribute('aria-label', 'Music player');
+    bar.innerHTML =
+      '<div class="mp-art">' + (cover ? '<img src="' + cover.src + '" alt="">' : '') + '</div>' +
+      '<div class="mp-info"><strong class="mp-title"></strong><span class="mp-artist"></span>' +
+      '<span class="mp-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div>' +
+      '<button class="mp-toggle" aria-label="Play or pause">▶</button>' +
+      '<div class="mp-timeline-wrap"><div class="mp-times"><span class="mp-current">0:00</span><span class="mp-total">0:00</span></div>' +
+      '<div class="mp-timeline" aria-hidden="true"><div class="mp-progress"><span class="mp-knob"></span></div></div></div>' +
+      '<button class="mp-close" aria-label="Close player">✕</button>' +
+      '<div class="mp-hint"></div>';
+    document.body.appendChild(bar);
+    requestAnimationFrame(() => requestAnimationFrame(() => bar.classList.add('mp-open')));
+    timeline = bar.querySelector('.mp-timeline');
+    progress = bar.querySelector('.mp-progress');
+    currentEl = bar.querySelector('.mp-current');
+    totalEl = bar.querySelector('.mp-total');
+    toggleBtn = bar.querySelector('.mp-toggle');
+    hintEl = bar.querySelector('.mp-hint');
+    bar.querySelector('.mp-close').addEventListener('click', () => {
+      if (audio) audio.pause();
+      bar.classList.remove('mp-open', 'mp-error');
+      document.body.classList.remove('mp-active');
+      setCardPlaying(false);
+    });
+    toggleBtn.addEventListener('click', () => togglePlay());
+    timeline.addEventListener('pointerdown', (e) => {
+      seeking = true;
+      try { timeline.setPointerCapture(e.pointerId); } catch (err) {}
+      seekTo(e.clientX);
+    });
+    timeline.addEventListener('pointermove', (e) => { if (seeking) seekTo(e.clientX); });
+    timeline.addEventListener('pointerup', () => { seeking = false; });
+    timeline.addEventListener('pointercancel', () => { seeking = false; });
+  }
+
+  function wireAudio() {
+    audio.addEventListener('play', () => {
+      bar.classList.add('is-playing');
+      toggleBtn.textContent = 'Ⅱ';
+      setCardPlaying(true);
+    });
+    audio.addEventListener('pause', () => {
+      bar.classList.remove('is-playing');
+      toggleBtn.textContent = '▶';
+      setCardPlaying(false);
+    });
+    audio.addEventListener('timeupdate', () => {
+      if (seeking || !audio.duration) return;
+      progress.style.width = (audio.currentTime / audio.duration) * 100 + '%';
+      currentEl.textContent = fmt(audio.currentTime);
+    });
+    audio.addEventListener('loadedmetadata', () => { totalEl.textContent = fmt(audio.duration); });
+    audio.addEventListener('ended', () => { audio.currentTime = 0; audio.pause(); });
+    audio.addEventListener('error', () => {
+      bar.classList.add('mp-error');
+      hintEl.textContent = '🎧 Add your song at ' + songSrc() + ' to hear it';
+      toggleBtn.textContent = '▶';
+      setCardPlaying(false);
+    });
+  }
+
+  function seekTo(clientX) {
+    if (!audio || !audio.duration) return;
+    const rect = timeline.getBoundingClientRect();
+    const pct = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+    audio.currentTime = pct * audio.duration;
+    progress.style.width = pct * 100 + '%';
+    currentEl.textContent = fmt(audio.currentTime);
+  }
+
+  function togglePlay(force) {
+    if (!audio) return;
+    const shouldPlay = force === undefined ? audio.paused : force;
+    if (shouldPlay) audio.play().catch(() => {});
+    else audio.pause();
+  }
+
+  playButton.addEventListener('click', () => {
+    const song = (window.siteContent && window.siteContent.featuredSong) || { title: 'Tum Tak', artist: 'Javed Ali, AR Rahman' };
+    if (!bar) {
+      buildPlayer();
+      audio = new Audio(songSrc(song));
+      audio.preload = 'metadata';
+      audio.dataset.src = songSrc(song);
+      wireAudio();
+    }
+    bar.querySelector('.mp-title').textContent = song.title || 'Featured song';
+    bar.querySelector('.mp-artist').textContent = song.artist || '';
+    const src = songSrc(song);
+    if (audio.dataset.src !== src) { audio.dataset.src = src; audio.src = src; audio.load(); }
+    bar.classList.add('mp-open');
+    document.body.classList.add('mp-active');
+    togglePlay(true);
+  });
+})();
 
 
 // ==== Safe scroll-reveal + micro-animations (guarded by html.js-anim) ====

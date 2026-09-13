@@ -102,7 +102,7 @@ window.siteContent = {
       link: 'https://deep-ai-dp.vercel.app'
     }
   ],
-  featuredSong: { title: 'Tum Tak', artist: 'Javed Ali, AR Rahman', mood: 'magic', year: '2013' },
+  featuredSong: { title: 'Tum Tak', artist: 'Javed Ali, AR Rahman', mood: 'magic', year: '2013', src: 'src/tum-tak.mp3' },
   songs: [
     { title: 'Good Days', artist: 'SZA', mood: 'soft reset' },
     { title: '505', artist: 'Arctic Monkeys', mood: 'late night' },
