@@ -1,6 +1,8 @@
+import { db } from './firebase-config.js';
+import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
 const menuButton = document.querySelector('.menu-button');
 const nav = document.querySelector('.desktop-nav');
-const content = window.siteContent;
 
 if (menuButton && nav) {
   menuButton.addEventListener('click', () => {
@@ -25,12 +27,14 @@ const movieCard = (movie, index) => {
   return `<article class="film-card${featured}">${image}<div class="${featured ? 'film-info' : ''}"><div class="film-number">${String(index + 1).padStart(2, '0')}</div><h3>${movie.title}</h3><p>${details}</p></div>${featured ? '' : '<span class="film-arrow">↗</span>'}</article>`;
 };
 
-if (content) {
+function renderSite(content) {
+  if (!content) return;
   const profile = { email: '', name: 'Ansh', intro: '', currently: 'figuring it out', photo: '', aboutParagraphs: ['', ''], skills: [], ...(content.profile || {}) };
   const brand = { companyName: 'Deepika App Developers', shortName: 'DAD', companyEmail: '', ownerLabel: 'Founder & owner', founded: '2026', description: '', tagline: '', ...(content.brand || {}) };
   const site = content.site || { name: "Ansh Singh's Corner", shortName: 'AS', title: "Ansh Singh's Corner" };
   const copy = content.pageCopy || {};
-  const faviconUrl = new URL('favicon.svg', document.currentScript.src).href;
+  const faviconUrl = new URL('favicon.svg', import.meta.url).href;
+
   if (!document.querySelector('link[data-site-favicon]')) {
     const favicon = document.createElement('link');
     favicon.rel = 'icon';
@@ -39,47 +43,50 @@ if (content) {
     favicon.dataset.siteFavicon = 'true';
     document.head.appendChild(favicon);
   }
-  document.querySelectorAll('[data-email-link]').forEach((link) => {
-    link.href = `mailto:${profile.email}`;
+
+  document.querySelectorAll('[data-email-link]').forEach((link) => { link.href = `mailto:${profile.email}`; });
+  document.querySelectorAll('[data-company-email-link]').forEach((link) => { link.href = `mailto:${brand.companyEmail}`; });
+  document.querySelectorAll('[data-brand-short]').forEach((el) => { el.textContent = brand.shortName; });
+  document.querySelectorAll('[data-brand-name]').forEach((el) => { el.textContent = brand.companyName; });
+  document.querySelectorAll('[data-brand-name-heading]').forEach((el) => { el.innerHTML = brand.companyName.replace(' App Developers', ' App<br><em>Developers.</em>'); });
+
+  document.querySelectorAll('.wordmark span').forEach((el) => {
+    el.textContent = '';
+    el.setAttribute('aria-label', site.shortName);
+    el.style.backgroundImage = `url("${faviconUrl}")`;
+    el.style.backgroundSize = 'cover';
   });
-  document.querySelectorAll('[data-company-email-link]').forEach((link) => {
-    link.href = `mailto:${brand.companyEmail}`;
-  });
-  document.querySelectorAll('[data-brand-short]').forEach((element) => { element.textContent = brand.shortName; });
-  document.querySelectorAll('[data-brand-name]').forEach((element) => { element.textContent = brand.companyName; });
-  document.querySelectorAll('[data-brand-name-heading]').forEach((element) => { element.innerHTML = brand.companyName.replace(' App Developers', ' App<br><em>Developers.</em>'); });
-  document.querySelectorAll('.wordmark span').forEach((element) => {
-    element.textContent = '';
-    element.setAttribute('aria-label', site.shortName);
-    element.style.backgroundImage = `url("${faviconUrl}")`;
-    element.style.backgroundSize = 'cover';
-  });
-  document.querySelectorAll('.wordmark strong').forEach((element) => { element.textContent = site.name; });
+  document.querySelectorAll('.wordmark strong').forEach((el) => { el.textContent = site.name; });
   if (site.title && document.body.dataset.page !== 'admin') document.title = site.title;
-  document.querySelectorAll('[data-profile-name]').forEach((element) => { element.textContent = `${profile.name}.`; });
-  document.querySelectorAll('[data-profile-role]').forEach((element) => { element.textContent = profile.role; });
-  document.querySelectorAll('[data-profile-intro]').forEach((element) => { element.textContent = profile.intro; });
-  document.querySelectorAll('[data-profile-photo]').forEach((element) => { element.src = profile.photo; });
-  document.querySelectorAll('[data-profile-currently]').forEach((element) => { element.textContent = profile.currently; });
+
+  document.querySelectorAll('[data-profile-name]').forEach((el) => { el.textContent = `${profile.name}.`; });
+  document.querySelectorAll('[data-profile-role]').forEach((el) => { el.textContent = profile.role; });
+  document.querySelectorAll('[data-profile-intro]').forEach((el) => { el.textContent = profile.intro; });
+  document.querySelectorAll('[data-profile-photo]').forEach((el) => { el.src = profile.photo; });
+  document.querySelectorAll('[data-profile-currently]').forEach((el) => { el.textContent = profile.currently; });
+
   const aboutHeading = document.querySelector('[data-about-heading]');
   if (aboutHeading) aboutHeading.textContent = profile.aboutHeading;
   const aboutParagraphs = document.querySelectorAll('[data-about-paragraph-one], [data-about-paragraph-two]');
   if (aboutParagraphs[0]) aboutParagraphs[0].textContent = profile.aboutParagraphs[0];
   if (aboutParagraphs[1]) aboutParagraphs[1].textContent = profile.aboutParagraphs[1];
-  document.querySelectorAll('[data-brand-tagline]').forEach((element) => { element.textContent = brand.tagline; });
-  document.querySelectorAll('[data-brand-description]').forEach((element) => { element.textContent = brand.description; });
-  document.querySelectorAll('[data-brand-owner-label]').forEach((element) => { element.textContent = brand.ownerLabel; });
-  document.querySelectorAll('[data-brand-founded]').forEach((element) => { element.textContent = `EST. ${brand.founded}`; });
-  document.querySelectorAll('[data-copy="homeAboutHeading"]').forEach((element) => { element.textContent = copy.homeAboutHeading || element.textContent; });
-  document.querySelectorAll('[data-copy="homeAboutFirst"]').forEach((element) => { element.textContent = copy.homeAboutFirst || element.textContent; });
-  document.querySelectorAll('[data-copy="homeAboutSecond"]').forEach((element) => { element.textContent = copy.homeAboutSecond || element.textContent; });
-  document.querySelectorAll('[data-copy="projectsNote"]').forEach((element) => { element.textContent = copy.projectsNote || element.textContent; });
-  document.querySelectorAll('[data-copy="favouritesHeading"]').forEach((element) => { element.textContent = copy.favouritesHeading || element.textContent; });
-  document.querySelectorAll('[data-copy="favouritesIntro"]').forEach((element) => { element.textContent = copy.favouritesIntro || element.textContent; });
-  document.querySelectorAll('[data-copy="songsHeading"]').forEach((element) => { element.textContent = copy.songsHeading || element.textContent; });
-  document.querySelectorAll('[data-copy="songsIntro"]').forEach((element) => { element.textContent = copy.songsIntro || element.textContent; });
-  document.querySelectorAll('[data-copy="moviesHeading"]').forEach((element) => { element.textContent = copy.moviesHeading || element.textContent; });
-  document.querySelectorAll('[data-copy="moviesIntro"]').forEach((element) => { element.textContent = copy.moviesIntro || element.textContent; });
+
+  document.querySelectorAll('[data-brand-tagline]').forEach((el) => { el.textContent = brand.tagline; });
+  document.querySelectorAll('[data-brand-description]').forEach((el) => { el.textContent = brand.description; });
+  document.querySelectorAll('[data-brand-owner-label]').forEach((el) => { el.textContent = brand.ownerLabel; });
+  document.querySelectorAll('[data-brand-founded]').forEach((el) => { el.textContent = `EST. ${brand.founded}`; });
+
+  document.querySelectorAll('[data-copy="homeAboutHeading"]').forEach((el) => { el.textContent = copy.homeAboutHeading || el.textContent; });
+  document.querySelectorAll('[data-copy="homeAboutFirst"]').forEach((el) => { el.textContent = copy.homeAboutFirst || el.textContent; });
+  document.querySelectorAll('[data-copy="homeAboutSecond"]').forEach((el) => { el.textContent = copy.homeAboutSecond || el.textContent; });
+  document.querySelectorAll('[data-copy="projectsNote"]').forEach((el) => { el.textContent = copy.projectsNote || el.textContent; });
+  document.querySelectorAll('[data-copy="favouritesHeading"]').forEach((el) => { el.textContent = copy.favouritesHeading || el.textContent; });
+  document.querySelectorAll('[data-copy="favouritesIntro"]').forEach((el) => { el.textContent = copy.favouritesIntro || el.textContent; });
+  document.querySelectorAll('[data-copy="songsHeading"]').forEach((el) => { el.textContent = copy.songsHeading || el.textContent; });
+  document.querySelectorAll('[data-copy="songsIntro"]').forEach((el) => { el.textContent = copy.songsIntro || el.textContent; });
+  document.querySelectorAll('[data-copy="moviesHeading"]').forEach((el) => { el.textContent = copy.moviesHeading || el.textContent; });
+  document.querySelectorAll('[data-copy="moviesIntro"]').forEach((el) => { el.textContent = copy.moviesIntro || el.textContent; });
+
   const pageType = document.body.dataset.page;
   if (pageType === 'favourites') {
     document.querySelector('.subpage-hero h1').textContent = copy.favouritesHeading || 'Things I love.';
@@ -95,7 +102,7 @@ if (content) {
   }
 
   const projectList = document.querySelector('#project-list');
-  if (projectList) projectList.innerHTML = content.projects.map(projectCard).join('');
+  if (projectList && content.projects) projectList.innerHTML = content.projects.map(projectCard).join('');
 
   const extraSections = document.querySelector('#extra-sections');
   if (extraSections) {
@@ -103,28 +110,54 @@ if (content) {
   }
 
   const skillsList = document.querySelector('#skills-list');
-  if (skillsList) skillsList.innerHTML = profile.skills.map((skill, index) => `<div><span>${String(index + 1).padStart(2, '0')}</span><strong>${skill.title}</strong><small>${skill.details}</small></div>`).join('');
+  if (skillsList && profile.skills) skillsList.innerHTML = profile.skills.map((skill, index) => `<div><span>${String(index + 1).padStart(2, '0')}</span><strong>${skill.title}</strong><small>${skill.details}</small></div>`).join('');
 
   const homeSongs = document.querySelector('#home-song-list');
-  if (homeSongs) homeSongs.innerHTML = content.songs.slice(0, 3).map(songRow).join('');
+  if (homeSongs && content.songs) homeSongs.innerHTML = content.songs.slice(0, 3).map(songRow).join('');
 
   const fullSongs = document.querySelector('#full-song-list');
-  if (fullSongs) fullSongs.insertAdjacentHTML('beforeend', content.songs.map(songRow).join(''));
+  if (fullSongs && content.songs) {
+    const header = fullSongs.querySelector('.list-header');
+    fullSongs.innerHTML = '';
+    if (header) fullSongs.appendChild(header);
+    fullSongs.insertAdjacentHTML('beforeend', content.songs.map(songRow).join(''));
+  }
 
   const homeMovies = document.querySelector('#home-movie-list');
-  if (homeMovies) homeMovies.innerHTML = content.movies.slice(0, 3).map(movieCard).join('');
+  if (homeMovies && content.movies) homeMovies.innerHTML = content.movies.slice(0, 3).map(movieCard).join('');
 
   const fullMovies = document.querySelector('#full-movie-list');
-  if (fullMovies) fullMovies.innerHTML = content.movies.map(movieCard).join('');
+  if (fullMovies && content.movies) fullMovies.innerHTML = content.movies.map(movieCard).join('');
 
-  const featuredSong = content.featuredSong;
-  document.querySelectorAll('[data-feature-song]').forEach((element) => { element.textContent = featuredSong.title; });
-  document.querySelectorAll('[data-feature-artist]').forEach((element) => { element.textContent = featuredSong.artist; });
+  const featuredSong = content.featuredSong || (content.songs && content.songs[0]);
+  if (featuredSong) {
+    document.querySelectorAll('[data-feature-song]').forEach((el) => { el.textContent = featuredSong.title; });
+    document.querySelectorAll('[data-feature-artist]').forEach((el) => { el.textContent = featuredSong.artist; });
+  }
+
   const songCount = document.querySelector('#song-count');
-  if (songCount) songCount.textContent = `${content.songs.length} songs, no skips.`;
+  if (songCount && content.songs) songCount.textContent = `${content.songs.length} songs, no skips.`;
   const movieCount = document.querySelector('#movie-count');
-  if (movieCount) movieCount.textContent = `${content.movies.length} films, many feelings.`;
+  if (movieCount && content.movies) movieCount.textContent = `${content.movies.length} films, many feelings.`;
 }
+
+// 1. Render immediate local content first
+renderSite(window.siteContent);
+
+// 2. Fetch live Cloud Firestore content
+async function syncRemoteContent() {
+  try {
+    const docRef = doc(db, 'site', 'content');
+    const snap = await getDoc(docRef);
+    if (snap.exists()) {
+      window.siteContent = { ...window.siteContent, ...snap.data() };
+      renderSite(window.siteContent);
+    }
+  } catch (error) {
+    console.warn('Firestore connection failed; running local fallback:', error);
+  }
+}
+syncRemoteContent();
 
 document.querySelector('.play-button')?.addEventListener('click', (event) => {
   const button = event.currentTarget;
