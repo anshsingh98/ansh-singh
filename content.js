@@ -51,7 +51,7 @@ window.siteContent = {
       description: 'A calm, simple home for files, ideas, and everything worth keeping close.',
       status: 'Concept / building',
       color: 'blue',
-      link: '#'
+      link: 'https://github.com/anshsingh98/ansh-singh'
     },
     {
       name: 'Deep Chats',
@@ -60,7 +60,7 @@ window.siteContent = {
       description: 'A focused space for conversations that go a little deeper than “hey”.',
       status: 'Concept / building',
       color: 'orange',
-      link: '#'
+      link: 'https://github.com/anshsingh98/ansh-singh'
     },
     {
       name: 'Deep AI',
@@ -69,7 +69,7 @@ window.siteContent = {
       description: 'Small, thoughtful AI tools made to help people think, make, and explore.',
       status: 'Concept / building',
       color: 'green',
-      link: '#'
+      link: 'https://github.com/anshsingh98/ansh-singh'
     }
   ],
   featuredSong: { title: 'Good Days', artist: 'SZA', mood: 'soft reset' },

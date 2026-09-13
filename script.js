@@ -36,6 +36,7 @@ if (content) {
   });
   document.querySelectorAll('[data-brand-short]').forEach((element) => { element.textContent = brand.shortName; });
   document.querySelectorAll('[data-brand-name]').forEach((element) => { element.textContent = brand.companyName; });
+  document.querySelectorAll('[data-brand-name-heading]').forEach((element) => { element.innerHTML = brand.companyName.replace(' App Developers', ' App<br><em>Developers.</em>'); });
   document.querySelectorAll('.wordmark span').forEach((element) => { element.textContent = brand.shortName; });
   document.querySelectorAll('.wordmark strong').forEach((element) => { element.textContent = brand.companyName; });
   document.querySelectorAll('[data-profile-name]').forEach((element) => { element.textContent = `${profile.name}.`; });
