@@ -31,22 +31,42 @@ const escapeHtml = (value = '') => String(value).replace(/[&<>'"]/g, (char) => (
 const resolvePath = (obj, path) => path.split('.').reduce((o, key) => (o ? o[key] : undefined), obj);
 
 // Plain single-line editable texts
-// ==== Intro overlay: plays once per session before the page reveals ====
+// ==== Intro overlay: fast split-curtain reveal (plays once per session) ====
 (function initIntroOverlay() {
   const overlay = document.getElementById('introOverlay');
   if (!overlay) return;
   const finish = () => {
     if (!overlay.isConnected) return;
     overlay.classList.add('is-done');
-    setTimeout(() => overlay.remove(), 950);
+    setTimeout(() => overlay.remove(), 800);
   };
   if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { overlay.remove(); return; }
   try {
     if (sessionStorage.getItem('introShown')) { overlay.remove(); return; }
     sessionStorage.setItem('introShown', '1');
   } catch (error) { /* private mode: just play it */ }
-  window.setTimeout(finish, 1300);      // matches the CSS build-up timing
-  window.setTimeout(() => { if (overlay.isConnected) finish(); }, 3000); // absolute safety net
+  window.setTimeout(finish, 1000);      // curtains split via CSS; remove node after
+  window.setTimeout(() => { if (overlay.isConnected) finish(); }, 2500); // absolute safety net
+})();
+
+// ==== Play hook toast: curiosity cue that makes visitors press play ====
+(function initPlayToast() {
+  let shown = false;
+  try { shown = !!sessionStorage.getItem('playToastShown'); } catch (error) {}
+  if (shown) return;
+  try { sessionStorage.setItem('playToastShown', '1'); } catch (error) {}
+  const playButton = document.querySelector('.play-button');
+  if (!playButton) return;
+  const song = (window.siteContent && window.siteContent.featuredSong) || { title: 'Tum Tak' };
+  const toast = document.createElement('button');
+  toast.type = 'button';
+  toast.className = 'play-toast';
+  toast.innerHTML = '<span class="pt-disc">🎧</span><span><em>' + (song.title || 'Your song') + '</em> is loaded — <strong>press play</strong></span>';
+  document.body.appendChild(toast);
+  const hide = () => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 600); };
+  toast.addEventListener('click', () => { playButton.click(); hide(); });
+  window.setTimeout(() => toast.classList.add('show'), 1500);
+  window.setTimeout(hide, 9000);
 })();
 
 function applyDataTexts(content) {
