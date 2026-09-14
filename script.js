@@ -91,7 +91,7 @@ function renderSite(content) {
   const brand = { companyName: 'Deepika App Developers', shortName: 'DAD', companyEmail: '', ownerLabel: 'Founder & owner', founded: '2026', description: '', tagline: '', ...(content.brand || {}) };
   const site = content.site || { name: "Ansh Singh's Corner", shortName: 'AS', title: "Ansh Singh's Corner" };
   const copy = content.pageCopy || {};
-  const faviconUrl = new URL('favicon.svg', import.meta.url).href;
+  const faviconUrl = new URL('images/favicon.svg', import.meta.url).href;
 
   if (!document.querySelector('link[data-site-favicon]')) {
     const favicon = document.createElement('link');
