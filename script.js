@@ -230,7 +230,7 @@ syncRemoteContent();
   const playButton = document.querySelector('.play-button');
   if (!playButton) return;
   const playIcon = playButton.querySelector('.play-icon');
-  let bar = null, audio = null, timeline = null, progress = null, currentEl = null, totalEl = null, toggleBtn = null, hintEl = null, seeking = false;
+  let bar = null, timeline = null, progress = null, currentEl = null, totalEl = null, toggleBtn = null, hintEl = null, seeking = false;
 
   const setCardPlaying = (on) => {
     playButton.classList.toggle('is-playing', on);
@@ -242,6 +242,13 @@ syncRemoteContent();
     return Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
   };
   const songSrc = (song) => (song && song.src) ? song.src : 'src/tum-tak.mp3';
+
+  // Pre-buffer the song during page load so play() is instant on click
+  let audio = new Audio(songSrc((window.siteContent && window.siteContent.featuredSong)));
+  audio.preload = 'auto';
+  audio.dataset.src = songSrc((window.siteContent && window.siteContent.featuredSong));
+  audio.load();
+  playButton.addEventListener('pointerenter', () => audio.load(), { once: false });
 
   function buildPlayer() {
     const cover = document.querySelector('.album-cover img');
@@ -329,9 +336,6 @@ syncRemoteContent();
     const song = (window.siteContent && window.siteContent.featuredSong) || { title: 'Tum Tak', artist: 'Javed Ali, AR Rahman' };
     if (!bar) {
       buildPlayer();
-      audio = new Audio(songSrc(song));
-      audio.preload = 'metadata';
-      audio.dataset.src = songSrc(song);
       wireAudio();
     }
     bar.querySelector('.mp-title').textContent = song.title || 'Featured song';
