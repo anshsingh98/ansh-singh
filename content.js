@@ -31,7 +31,7 @@ window.siteContent = {
   "brand": {
     "companyName": "Deepika App Developers",
     "founded": "2026",
-    "shortName": "DA",
+    "shortName": "DAD",
     "description": "Deepika App Developers is Ansh Singh's independent creative technology company for building useful, curious, and slightly ambitious digital products.",
     "tagline": "Deepika App Developers build it fire it.",
     "companyEmail": "shubh99singh00@gmail.com",
@@ -163,7 +163,8 @@ window.siteContent = {
     {
       "title": "Interstellar ",
       "director": "Christopher Nolen ",
-      "year": "2014"
+      "year": "2014",
+      "image": "https://www.warnerbros.co.uk/movies/interstellar"
     },
     {
       "year": "2025",
@@ -179,31 +180,6 @@ window.siteContent = {
       "year": "2025",
       "title": "Tere ishk mein",
       "director": "Anand L. Rai"
-    },
-    {
-      "director": "Spike Jonze",
-      "year": "2013",
-      "title": "Her"
-    },
-    {
-      "director": "Rajkumar Hirani",
-      "year": "2009",
-      "title": "3 Idiots"
-    },
-    {
-      "year": "2014",
-      "title": "Whiplash",
-      "director": "Damien Chazelle"
-    },
-    {
-      "year": "2013",
-      "title": "The Secret Life of Walter Mitty",
-      "director": "Ben Stiller"
-    },
-    {
-      "title": "Arrival",
-      "director": "Denis Villeneuve",
-      "year": "2016"
     }
   ]
 };
