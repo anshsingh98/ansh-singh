@@ -164,7 +164,7 @@ window.siteContent = {
       "title": "Interstellar ",
       "director": "Christopher Nolen ",
       "year": "2014",
-      "image": ""
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-Ex1wLqtPvhut3KGVxJWPeW1kNM7aRmjVjQAYx_lwZA&s=10"
     },
     {
       "year": "2025",
