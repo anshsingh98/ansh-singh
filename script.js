@@ -457,44 +457,82 @@ syncRemoteContent();
 })();
   setTimeout(revealAll, 4000);
 })();
-// ==== Cursor glow + click particle burst (skipped for touch/reduced motion) ====
-(function initCursorFx() {
-  const coarse = window.matchMedia('(pointer: coarse)').matches;
+// ==== Custom cursor: warm ink dot + lagging ring + soft click burst ====
+// Cozy, hand-made feel. Skipped entirely for touch devices & reduced motion.
+(function initCustomCursor() {
+  const fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (coarse || reduced) return;
+  if (!fine || reduced) return;
 
-  const glow = document.createElement('div');
-  glow.className = 'cursor-glow';
-  document.body.appendChild(glow);
+  document.documentElement.classList.add('cc-on');
 
-  let gx = window.innerWidth / 2, gy = window.innerHeight / 2, tx = gx, ty = gy, active = false;
-  const COLORS = ['#e5482e', '#f5c518', '#1d1d1b'];
+  const dot = document.createElement('div');
+  dot.className = 'cursor-dot';
+  const ring = document.createElement('div');
+  ring.className = 'cursor-ring';
+  document.body.appendChild(dot);
+  document.body.appendChild(ring);
+
+  // dot is snappy, ring trails behind with a soft spring feel
+  let dx = -100, dy = -100, rx = -100, ry = -100, tx = -100, ty = -100;
+  let visible = false, scale = 1, targetScale = 1;
 
   function loop() {
-    gx += (tx - gx) * 0.12;
-    gy += (ty - gy) * 0.12;
-    glow.style.left = gx + 'px';
-    glow.style.top = gy + 'px';
+    dx += (tx - dx) * 0.55;
+    dy += (ty - dy) * 0.55;
+    rx += (tx - rx) * 0.16;
+    ry += (ty - ry) * 0.16;
+    scale += (targetScale - scale) * 0.2;
+    dot.style.transform = `translate(${dx}px, ${dy}px) translate(-50%,-50%)`;
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%) scale(${scale.toFixed(3)})`;
     requestAnimationFrame(loop);
   }
-  window.addEventListener('pointermove', (e) => {
-    tx = e.clientX; ty = e.clientY;
-    if (!active) { active = true; document.body.classList.add('glow-on'); }
-  }, { passive: true });
   requestAnimationFrame(loop);
 
+  window.addEventListener('pointermove', (e) => {
+    tx = e.clientX; ty = e.clientY;
+    if (!visible) {
+      visible = true;
+      dx = rx = tx; dy = ry = ty; // don't glide in from a corner
+      dot.classList.add('is-live');
+      ring.classList.add('is-live');
+    }
+  }, { passive: true });
+
+  // gently sleep when the cursor leaves the window
+  document.addEventListener('mouseleave', () => {
+    dot.classList.remove('is-live');
+    ring.classList.remove('is-live');
+    visible = false;
+  });
+
+  // grow into a warm halo + tiny heart over anything interactive
+  const INTERACTIVE = 'a, button, [role="button"], input, textarea, select, label, .track-row, .favourite-link, .film-card, .project-card';
+  document.addEventListener('pointerover', (e) => {
+    const hit = e.target.closest(INTERACTIVE);
+    ring.classList.toggle('is-link', !!hit);
+    dot.classList.toggle('is-link', !!hit);
+    targetScale = hit ? 1.35 : 1;
+  });
+
+  // squish on press
+  window.addEventListener('pointerdown', () => { ring.classList.add('is-down'); targetScale *= 0.8; });
+  window.addEventListener('pointerup', () => { ring.classList.remove('is-down'); targetScale = ring.classList.contains('is-link') ? 1.35 : 1; });
+
+  // soft confetti on click (kept small & tasteful)
+  const COLORS = ['#e5482e', '#f6c945', '#1d1d1b'];
   function burst(x, y) {
-    const ring = document.createElement('span');
-    ring.className = 'burst-ring';
-    ring.style.left = x + 'px'; ring.style.top = y + 'px';
-    ring.style.width = ring.style.height = '44px';
-    document.body.appendChild(ring);
-    setTimeout(() => ring.remove(), 600);
-    for (let i = 0; i < 9; i++) {
+    const ringEl = document.createElement('span');
+    ringEl.className = 'burst-ring';
+    ringEl.style.left = x + 'px'; ringEl.style.top = y + 'px';
+    ringEl.style.width = ringEl.style.height = '40px';
+    document.body.appendChild(ringEl);
+    setTimeout(() => ringEl.remove(), 600);
+    for (let i = 0; i < 7; i++) {
       const d = document.createElement('span');
       d.className = 'burst-dot';
-      const ang = (Math.PI * 2 * i) / 9 + Math.random() * 0.6;
-      const dist = 34 + Math.random() * 34;
+      const ang = (Math.PI * 2 * i) / 7 + Math.random() * 0.5;
+      const dist = 26 + Math.random() * 26;
       d.style.setProperty('--bx', Math.cos(ang) * dist + 'px');
       d.style.setProperty('--by', Math.sin(ang) * dist + 'px');
       d.style.left = x + 'px'; d.style.top = y + 'px';
