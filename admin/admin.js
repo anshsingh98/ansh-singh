@@ -132,13 +132,32 @@ document.addEventListener('click', (event) => {
   }
 });
 
+// Sync the saved content into the real content.js in the GitHub repo
+async function syncContentToGithub() {
+  const response = await fetch('/api/update-content', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content: workingContent, password: ADMIN_PASSWORD })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+  return data.changed;
+}
+
 document.querySelector('#save-button').addEventListener('click', async () => {
   status.textContent = 'Saving live to cloud...';
   status.className = '';
   try {
     await setDoc(doc(db, 'site', 'content'), workingContent);
-    status.textContent = 'Saved live to cloud!';
-    status.className = 'saved-message';
+    status.textContent = 'Saved live to cloud! Syncing to GitHub...';
+    try {
+      const changed = await syncContentToGithub();
+      status.textContent = changed ? 'Saved live to cloud and committed to GitHub!' : 'Saved live to cloud! GitHub was already up to date.';
+      status.className = 'saved-message';
+    } catch (ghErr) {
+      status.className = 'login-error';
+      status.textContent = 'Saved live to cloud, but the GitHub commit failed: ' + ghErr.message;
+    }
   } catch (err) {
     status.textContent = 'Cloud save failed: ' + err.message;
     status.className = 'login-error';
@@ -150,8 +169,15 @@ document.querySelector('#reset-button').addEventListener('click', async () => {
   workingContent = JSON.parse(JSON.stringify(starterContent));
   try {
     await setDoc(doc(db, 'site', 'content'), workingContent);
-    status.textContent = 'Starter content restored on cloud!';
-    status.className = 'saved-message';
+    status.textContent = 'Starter content restored on cloud! Syncing to GitHub...';
+    try {
+      const changed = await syncContentToGithub();
+      status.textContent = changed ? 'Starter content restored on cloud and GitHub!' : 'Starter content restored on cloud! GitHub was already up to date.';
+      status.className = 'saved-message';
+    } catch (ghErr) {
+      status.className = 'login-error';
+      status.textContent = 'Starter content restored on cloud, but the GitHub commit failed: ' + ghErr.message;
+    }
   } catch (err) {
     status.textContent = 'Database reset failed: ' + err.message;
   }
