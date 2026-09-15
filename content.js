@@ -26,22 +26,6 @@ window.siteContent = {
     "homeAboutHeading": "I make apps and services you may use daily.",
     "projectsNote": "Deepika App Developers, build it fire it",
     "favouritesHeading": "Things I love.",
-    "workHeading": "Useful things,\nmade well.",
-    "workIntro": "I care about thoughtful interfaces, clean code, and building things people actually enjoy using.",
-    "nowplayingHeading": "Currently\nexploring.",
-    "nowplayingText": "Right now I'm deep in a few new experiments — small tools, better code, and a growing list of music and films worth keeping close. The corner grows as I do.",
-    "connectHeading": "Let's make\nsomething nice.",
-    "connectText": "Whether it's a project, a song, or just a good conversation — my WhatsApp is always open. Message me and I'll get back to you.",
-    "footerHeading": "Come back\nanytime.",
-    "footerText": "Built with care, curiosity, and too much music.",
-    "connectNote": "Always open.",
-    "nowplayingNote": "A little snapshot, right now.",
-    "nowplayingEyebrow": "contact",
-    "playlistNote": "Top 3 on the homepage.",
-    "filmsNote": "Top 3 on the homepage.",
-    "playlistEyebrow": "On repeat lately",
-    "ticker": ["CODE WITH INTENT", "LIVE WITH CURIOSITY", "COLLECT GOOD STORIES"],
-    "extraSections": [],
     "projectsLabel": "THE COMPANY / THE PROJECTS"
   },
   "brand": {
@@ -80,7 +64,7 @@ window.siteContent = {
         "title": "singer, musician"
       }
     ],
-    "intro": "Hi ! I am Ansh Singh my age is 14 and I am a Developer, A dev from India. Owner of Deepika Film Studios."
+    "intro": "Hi ! I am Ansh Singh my age is 14 and I am a Developer, A dev from India. Owner of Deepika App Developers."
   },
   "projects": [
     {
@@ -115,8 +99,7 @@ window.siteContent = {
     "artist": "Javed Ali, AR Rahman",
     "title": "Tum Tak",
     "mood": "like a meditation",
-    "year": "2013",
-    "src": "src/tum-tak.mp3"
+    "year": "2013"
   },
   "songs": [
     {
