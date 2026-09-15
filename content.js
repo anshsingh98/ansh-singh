@@ -164,7 +164,7 @@ window.siteContent = {
       "title": "Interstellar ",
       "director": "Christopher Nolen ",
       "year": "2014",
-      "image": "https://www.warnerbros.co.uk/movies/interstellar"
+      "image": ""
     },
     {
       "year": "2025",
