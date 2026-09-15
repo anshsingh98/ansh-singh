@@ -76,10 +76,21 @@ function applyDataTexts(content) {
   });
 }
 
-// Headings stored as plain text ("main\naccent line") -> keeps the two-font accent automatically
+// Headings stored as plain text. Two ways to get the two-font (Playfair) accent:
+//   1. *asterisks* around any word(s) -> those words render in the accent font, anywhere
+//   2. legacy: two lines -> the last word of the second line gets the accent automatically
+function accentHtml(line) {
+  const safe = escapeHtml(line.trim());
+  if (!/\*[^*]+\*/.test(safe)) return safe;
+  return safe.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+}
 function headingHtml(text) {
   if (!text) return '';
-  const parts = String(text).split('\n');
+  const lines = String(text).split('\n');
+  if (lines.some((line) => /\*[^*]+\*/.test(line))) {
+    return lines.map(accentHtml).join('<br>');
+  }
+  const parts = lines;
   const first = escapeHtml(parts[0] || '');
   if (parts.length < 2) return first;
   const words = (parts[1] || '').trim().split(/\s+/);
@@ -166,15 +177,15 @@ function renderSite(content) {
   document.querySelectorAll('[data-brand-owner-label]').forEach((el) => { el.textContent = brand.ownerLabel; });
   document.querySelectorAll('[data-brand-founded]').forEach((el) => { el.textContent = `EST. ${brand.founded}`; });
 
-  document.querySelectorAll('[data-copy="homeAboutHeading"]').forEach((el) => { el.textContent = copy.homeAboutHeading || el.textContent; });
+  document.querySelectorAll('[data-copy="homeAboutHeading"]').forEach((el) => { el.innerHTML = copy.homeAboutHeading ? headingHtml(copy.homeAboutHeading) : el.innerHTML; });
   document.querySelectorAll('[data-copy="homeAboutFirst"]').forEach((el) => { el.textContent = copy.homeAboutFirst || el.textContent; });
   document.querySelectorAll('[data-copy="homeAboutSecond"]').forEach((el) => { el.textContent = copy.homeAboutSecond || el.textContent; });
   document.querySelectorAll('[data-copy="projectsNote"]').forEach((el) => { el.textContent = copy.projectsNote || el.textContent; });
-  document.querySelectorAll('[data-copy="favouritesHeading"]').forEach((el) => { el.textContent = copy.favouritesHeading || el.textContent; });
+  document.querySelectorAll('[data-copy="favouritesHeading"]').forEach((el) => { el.innerHTML = copy.favouritesHeading ? headingHtml(copy.favouritesHeading) : el.innerHTML; });
   document.querySelectorAll('[data-copy="favouritesIntro"]').forEach((el) => { el.textContent = copy.favouritesIntro || el.textContent; });
-  document.querySelectorAll('[data-copy="songsHeading"]').forEach((el) => { el.textContent = copy.songsHeading || el.textContent; });
+  document.querySelectorAll('[data-copy="songsHeading"]').forEach((el) => { el.innerHTML = copy.songsHeading ? headingHtml(copy.songsHeading) : el.innerHTML; });
   document.querySelectorAll('[data-copy="songsIntro"]').forEach((el) => { el.textContent = copy.songsIntro || el.textContent; });
-  document.querySelectorAll('[data-copy="moviesHeading"]').forEach((el) => { el.textContent = copy.moviesHeading || el.textContent; });
+  document.querySelectorAll('[data-copy="moviesHeading"]').forEach((el) => { el.innerHTML = copy.moviesHeading ? headingHtml(copy.moviesHeading) : el.innerHTML; });
   document.querySelectorAll('[data-copy="moviesIntro"]').forEach((el) => { el.textContent = copy.moviesIntro || el.textContent; });
 
   const pageType = document.body.dataset.page;
