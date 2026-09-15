@@ -61,7 +61,7 @@ window.siteContent = {
     email: 'shubh99singh00@gmail.com',
     whatsapp: '917861923886',
     currently: 'figuring it out',
-    photo: 'https://i.ibb.co/Z08Cdm1/IMG-20260711-WA0006.jpg',
+    photo: 'https://i.ibb.co/SXh5jNY2/opppo-19-sid-photos-2784.jpg',
     aboutHeading: 'I make websites, listen to everything, and stay curious.',
     aboutParagraphs: [
       'When I\'m not deep in a code editor, you\'ll probably find me hunting for a new song, rewatching a great film, or trying to understand how something works.',
