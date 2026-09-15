@@ -68,6 +68,12 @@ html.cc-on .cursor-glow,body.glow-on .cursor-glow{display:none}
 .burst-ring{position:fixed;border-radius:50%;pointer-events:none;z-index:9997;border:2px solid var(--yellow);animation:ringPop .55s ease-out forwards}
 @keyframes ringPop{from{opacity:.9;transform:translate(-50%,-50%) scale(.2)}to{opacity:0;transform:translate(-50%,-50%) scale(1.6)}}
 
+/* ==== MOVIE POSTER IMAGES: fit inside film cards (fixes overflow) ==== */
+.film-card{position:relative;overflow:hidden}
+.film-card>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;z-index:0}
+.film-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(29,29,27,0) 32%,rgba(29,29,27,.85) 100%);z-index:1;pointer-events:none}
+.film-card>*:not(img){position:relative;z-index:2}
+
 /* ==== PLAYER UX HARDENING ==== */
 .mini-player{z-index:200;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
 .mp-close{width:34px;height:34px;display:grid;place-items:center;border-radius:50%}
