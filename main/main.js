@@ -38,6 +38,16 @@ logoutButton?.addEventListener('click', () => {
 
 const starterContent = JSON.parse(JSON.stringify(window.siteContent));
 let workingContent = JSON.parse(JSON.stringify(window.siteContent));
+
+// Deep merge: a partial cloud save must never wipe keys that exist locally
+const isPlainObject = (value) => value && typeof value === 'object' && !Array.isArray(value);
+function deepMerge(base, patch) {
+  const out = { ...base };
+  for (const key of Object.keys(patch || {})) {
+    out[key] = isPlainObject(patch[key]) && isPlainObject(base?.[key]) ? deepMerge(base[key], patch[key]) : patch[key];
+  }
+  return out;
+}
 const form = document.querySelector('#admin-form');
 const status = document.querySelector('#save-status');
 
@@ -91,7 +101,7 @@ async function loadRemoteAdminContent() {
   try {
     const snap = await getDoc(doc(db, 'site', 'content'));
     if (snap.exists()) {
-      workingContent = { ...workingContent, ...snap.data() };
+      workingContent = deepMerge(workingContent, snap.data());
       renderAll();
       status.textContent = 'Cloud data synced';
       status.className = 'saved-message';

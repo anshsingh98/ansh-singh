@@ -102,6 +102,16 @@ function buildTicker(content) {
   track.innerHTML = [...phrases, ...phrases].map((p) => `${escapeHtml(p)}<b>✳</b>`).join('');
 }
 
+// Deep merge: a partial cloud save must never wipe keys that exist locally
+const isPlainObject = (value) => value && typeof value === 'object' && !Array.isArray(value);
+function deepMerge(base, patch) {
+  const out = { ...base };
+  for (const key of Object.keys(patch || {})) {
+    out[key] = isPlainObject(patch[key]) && isPlainObject(base?.[key]) ? deepMerge(base[key], patch[key]) : patch[key];
+  }
+  return out;
+}
+
 function renderSite(content) {
   if (!content) return;
   applyDataTexts(content);
@@ -232,7 +242,7 @@ async function syncRemoteContent() {
     const docRef = doc(db, 'site', 'content');
     onSnapshot(docRef, (snap) => {
       if (snap.exists()) {
-        window.siteContent = { ...window.siteContent, ...snap.data() };
+        window.siteContent = deepMerge(window.siteContent, snap.data());
         renderSite(window.siteContent);
         window.__revealRescan && window.__revealRescan();
       }
