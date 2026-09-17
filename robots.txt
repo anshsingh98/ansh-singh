@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Keep the admin panel out of search engines
+Disallow: /main
+
+Sitemap: https://singh-ansh.vercel.app/sitemap.xml
