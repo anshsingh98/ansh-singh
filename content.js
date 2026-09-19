@@ -34,7 +34,7 @@ window.siteContent = {
     "nowplayingText": "I am currently fixing the apps and doing database migration of our apps and as well as I am on a trip with friends!",
     "connectHeading": "you can say hello *to me*",
     "connectText": "say hello to me or get to know infromation about DAD or email the studio for PROMOTION and business enquiry.",
-    "workHeading": "Useful things, *\nmade well. *"
+    "workHeading": "Useful things,\n*made well.*"
   },
   "brand": {
     "companyName": "Deepika App Developers",
