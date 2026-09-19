@@ -26,7 +26,8 @@ window.siteContent = {
     "homeAboutHeading": "I make apps and services you may use daily.",
     "projectsNote": "Deepika App Developers, build it fire it",
     "favouritesHeading": "Things I love.",
-    "projectsLabel": "THE COMPANY / THE PROJECTS"
+    "projectsLabel": "THE COMPANY / THE PROJECTS",
+    "footerHeading": "Come Back *Anytime*"
   },
   "brand": {
     "companyName": "Deepika App Developers",
