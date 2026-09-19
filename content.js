@@ -64,52 +64,52 @@ window.siteContent = {
         "title": "Frontend development"
       },
       {
-        "details": "Python · Node.js ·  and other",
-        "title": "Backend development"
+        "title": "Backend development",
+        "details": "Python · Node.js ·  and other"
       },
       {
-        "details": "currently: learning Guitar",
-        "title": "singer, musician"
+        "title": "singer, musician",
+        "details": "currently: learning Guitar"
       }
     ],
     "intro": "Hi ! I am Ansh Singh my age is 14 and I am a Developer, A dev from India. Owner of Deepika App Developers."
   },
   "projects": [
     {
-      "name": "Deep Clouds",
       "status": "Active",
-      "link": "https://deep-clouds.vercel.app",
-      "category": "Cloud platform",
       "description": "A text sharing platform with 6 digit pin, will be expanded by cloud storage.",
       "color": "blue",
-      "number": "01"
+      "category": "Cloud platform",
+      "number": "01",
+      "name": "Deep Clouds",
+      "link": "https://deep-clouds.vercel.app"
     },
     {
-      "number": "02",
+      "status": "Active",
       "category": "Conversation app",
       "color": "orange",
+      "description": "A msging app like whatsapp, but made by me.",
       "link": "https://deep-chats.vercel.app",
-      "name": "Deep Chats",
-      "status": "Active",
-      "description": "A msging app like whatsapp, but made by me."
+      "number": "02",
+      "name": "Deep Chats"
     },
     {
+      "number": "03",
+      "color": "green",
+      "link": "https://deep-ai-dp.vercel.app",
       "name": "Deep AI",
       "status": "Active",
-      "category": "AI chatbot",
       "description": "Small, thoughtful AI tools made to help people think, make, and explore.",
-      "link": "https://deep-ai-dp.vercel.app",
-      "color": "green",
-      "number": "03"
+      "category": "AI chatbot"
     },
     {
-      "name": "Deep Cast",
-      "category": "Casting app",
-      "number": "04",
       "description": "A browser based screen sharing tool with 0 latency and free service.",
-      "status": "coming soon..",
-      "color": "red",
-      "link": "https://deep-cast.vercel.app"
+      "number": "04",
+      "category": "Casting app",
+      "link": "https://deep-cast.vercel.app",
+      "color": "#65c454",
+      "name": "Deep Cast",
+      "status": "coming soon.."
     }
   ],
   "featuredSong": {
@@ -120,49 +120,49 @@ window.siteContent = {
   },
   "songs": [
     {
-      "artist": "Javed Ali, AR Rahman",
-      "title": "Tum Tak",
-      "mood": ""
-    },
-    {
-      "artist": "Anuv Jain",
-      "title": "Arz Kiya Hai",
-      "mood": ""
-    },
-    {
-      "artist": "Anuv Jain",
       "mood": "",
-      "title": "Jo Tum Mere Ho"
+      "artist": "Javed Ali, AR Rahman",
+      "title": "Tum Tak"
+    },
+    {
+      "title": "Arz Kiya Hai",
+      "artist": "Anuv Jain",
+      "mood": ""
+    },
+    {
+      "artist": "Anuv Jain",
+      "title": "Jo Tum Mere Ho",
+      "mood": ""
     },
     {
       "title": "Raanjhanaa theme song",
-      "mood": "",
-      "artist": "Javed Ali "
-    },
-    {
-      "title": "Abhi Na Jaao ",
-      "artist": "Aasha Boshle",
+      "artist": "Javed Ali ",
       "mood": ""
     },
     {
-      "title": "Mitwa Mitwa",
       "mood": "",
-      "artist": "Shafqat Amanat Ali, Shankar Mahadevan, and Caralisa Monteiro"
+      "artist": "Aasha Boshle",
+      "title": "Abhi Na Jaao "
     },
     {
-      "title": "Ilahi",
+      "artist": "Shafqat Amanat Ali, Shankar Mahadevan, and Caralisa Monteiro",
       "mood": "",
-      "artist": "Arijit Singh"
+      "title": "Mitwa Mitwa"
     },
     {
+      "mood": "",
+      "artist": "Arijit Singh",
+      "title": "Ilahi"
+    },
+    {
+      "artist": "Kishore Kumar",
       "title": "Aa Chal ke Tujhe",
-      "mood": "",
-      "artist": "Kishore Kumar"
+      "mood": ""
     },
     {
-      "mood": "",
+      "artist": "Lady Gaga, Bruno Mars",
       "title": "DIe With A smile",
-      "artist": "Lady Gaga, Bruno Mars"
+      "mood": ""
     },
     {
       "mood": "",
@@ -172,14 +172,14 @@ window.siteContent = {
   ],
   "movies": [
     {
-      "title": "Raanjhanaa",
       "year": "2013",
+      "image": "https://thumb.wikimedia.org/wikipedia/en/thumb/a/ae/Raanjhanaafilmposter.jpg/250px-Raanjhanaafilmposter.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail",
       "director": "Anand L. Rai",
-      "image": "https://thumb.wikimedia.org/wikipedia/en/thumb/a/ae/Raanjhanaafilmposter.jpg/250px-Raanjhanaafilmposter.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail"
+      "title": "Raanjhanaa"
     },
     {
-      "title": "Interstellar ",
       "director": "Christopher Nolen ",
+      "title": "Interstellar ",
       "year": "2014",
       "image": ""
     },
@@ -189,26 +189,26 @@ window.siteContent = {
       "title": "Mahavtar Narsimha"
     },
     {
-      "year": "2007",
       "director": "Aamir Khan",
-      "title": "Taare Zameen Par"
+      "title": "Taare Zameen Par",
+      "year": "2007"
     },
     {
-      "year": "2025",
+      "director": "Anand L. Rai",
       "title": "Tere ishk mein",
-      "director": "Anand L. Rai"
+      "year": "2025"
     },
     {
       "title": "Maharaja",
+      "image": "",
       "director": "Nithilan Saminathan",
-      "year": "2024",
-      "image": ""
+      "year": "2024"
     },
     {
-      "title": "Chhaavaa",
       "director": " Laxman Utekar",
-      "year": "2025",
-      "image": ""
+      "title": "Chhaavaa",
+      "image": "",
+      "year": "2025"
     }
   ]
 };
