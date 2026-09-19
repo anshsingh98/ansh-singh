@@ -19,7 +19,28 @@ document.querySelectorAll('.desktop-nav a').forEach((link) => {
 });
 
 const songRow = (song, index) => `<div class="track-row"><b>${String(index + 1).padStart(2, '0')}</b><strong>${song.title} <small>${song.artist}</small></strong><span>${song.mood}</span><span>↗</span></div>`;
-const projectCard = (project) => `<article class="project-card project-${project.color}"><div class="project-card-top"><span>${project.number}</span><span>${project.category}</span></div><div class="project-icon">${project.name.charAt(0)}</div><h3>${project.name}</h3><p>${project.description}</p><div class="project-card-bottom"><small>${project.status}</small><a href="${project.link}" aria-label="Open ${project.name}">↗</a></div></article>`;
+// Project card colour: named themes keep their classes; any other valid CSS
+// colour (hex, rgb/rgba, hsl, color names, etc.) is applied inline, with the
+// text colour flipped automatically for readability.
+const KNOWN_PROJECT_COLORS = ['blue', 'orange', 'green'];
+function projectCardColorAttrs(color) {
+  const value = String(color || '').trim();
+  if (!value) return { cls: '', style: '' };
+  if (KNOWN_PROJECT_COLORS.includes(value.toLowerCase())) return { cls: ` project-${value.toLowerCase()}`, style: '' };
+  let supports = false;
+  try { supports = window.CSS && CSS.supports('background-color', value); } catch (e) { supports = false; }
+  if (!supports) return { cls: '', style: '' };
+  let text = '#1d1d1b';
+  try {
+    const ctx = document.createElement('canvas').getContext('2d');
+    ctx.fillStyle = '#000'; ctx.fillStyle = value; ctx.fillRect(0, 0, 1, 1);
+    const px = ctx.getImageData(0, 0, 1, 1).data;
+    const lum = (0.299 * px[0] + 0.587 * px[1] + 0.114 * px[2]) / 255;
+    text = lum > 0.55 ? '#1d1d1b' : '#f4f0e8';
+  } catch (e) { /* keep default dark text */ }
+  return { cls: '', style: ` style="background:${escapeHtml(value)};color:${text}"` };
+}
+const projectCard = (project) => { const c = projectCardColorAttrs(project.color); return `<article class="project-card${c.cls}"${c.style}><div class="project-card-top"><span>${project.number}</span><span>${project.category}</span></div><div class="project-icon">${project.name.charAt(0)}</div><h3>${project.name}</h3><p>${project.description}</p><div class="project-card-bottom"><small>${project.status}</small><a href="${project.link}" aria-label="Open ${project.name}">↗</a></div></article>`; };
 const movieCard = (movie, index) => {
   const featured = index === 0 ? ' film-card-feature' : '';
   const image = movie.image ? `<img src="${movie.image}" alt="Cinema seats" />` : '';
