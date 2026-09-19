@@ -51,22 +51,6 @@
 body.mp-active{padding-bottom:80px}
 @media(max-width:760px){body.mp-active{padding-bottom:108px}}
 
-/* ==== CUSTOM CURSOR: warm ink dot + lagging ring (desktop, fine pointers) ==== */
-html.cc-on, html.cc-on body, html.cc-on a, html.cc-on button, html.cc-on .track-row, html.cc-on .favourite-link{cursor:none}
-html.cc-on .mini-player, html.cc-on .mini-player *{cursor:none}
-.cursor-dot{position:fixed;left:0;top:0;width:7px;height:7px;border-radius:50%;background:var(--ink);pointer-events:none;z-index:9999;opacity:0;transition:opacity .25s,background .25s,width .25s,height .25s;will-change:transform}
-.cursor-ring{position:fixed;left:0;top:0;width:30px;height:30px;border-radius:50%;border:1.5px solid rgba(229,72,46,.75);pointer-events:none;z-index:9998;display:grid;place-items:center;opacity:0;transition:opacity .25s,border-color .3s,background .3s;will-change:transform}
-.cursor-dot.is-live,.cursor-ring.is-live{opacity:1}
-.cursor-dot.is-link{background:var(--red);width:9px;height:9px}
-.cursor-ring.is-link{border-color:var(--yellow);background:rgba(246,201,69,.14)}
-.cursor-ring.is-link::after{content:'♥';font-size:11px;line-height:1;color:var(--red);animation:ccHeart .9s ease-in-out infinite}
-@keyframes ccHeart{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
-.cursor-ring.is-down{background:rgba(229,72,46,.16)}
-html.cc-on .cursor-glow,body.glow-on .cursor-glow{display:none}
-.burst-dot{position:fixed;width:8px;height:8px;border-radius:50%;pointer-events:none;z-index:9998;will-change:transform,opacity;animation:burstFly .7s cubic-bezier(.16,.84,.44,1) forwards}
-@keyframes burstFly{from{transform:translate(-50%,-50%) scale(1);opacity:1}to{transform:translate(calc(-50% + var(--bx)),calc(-50% + var(--by))) scale(.1);opacity:0}}
-.burst-ring{position:fixed;border-radius:50%;pointer-events:none;z-index:9997;border:2px solid var(--yellow);animation:ringPop .55s ease-out forwards}
-@keyframes ringPop{from{opacity:.9;transform:translate(-50%,-50%) scale(.2)}to{opacity:0;transform:translate(-50%,-50%) scale(1.6)}}
 
 /* ==== MOVIE POSTER IMAGES: fit inside film cards (fixes overflow) ==== */
 .film-card{position:relative;overflow:hidden}
@@ -79,7 +63,37 @@ html.cc-on .cursor-glow,body.glow-on .cursor-glow{display:none}
 .mp-close{width:34px;height:34px;display:grid;place-items:center;border-radius:50%}
 .mp-toggle{width:46px;height:46px}
 @media(max-width:760px){.mini-player{padding-bottom:calc(12px + env(safe-area-inset-bottom,0px))}.mp-close{width:40px;height:40px}}
-@media(prefers-reduced-motion:reduce){.cursor-dot,.cursor-ring,.burst-dot,.burst-ring{display:none!important}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ==== DARK MODE: light is always the default & first mode ==== */
+html[data-theme="dark"]{--paper:#141310;--ink:#f2ede3;--muted:#9a948a;--line:#33302a}
+html[data-theme="dark"] body{background:#141310;color:#f2ede3;transition:background-color .4s ease,color .4s ease}
+html[data-theme="dark"] .projects-section{color:#e6e2da}
+html[data-theme="dark"] .project-card{color:#1d1d1b}
+html[data-theme="dark"] .project-card a{color:#1d1d1b}
+html[data-theme="dark"] .film-card-feature{background:#1e1d19;color:#f2ede3}
+html[data-theme="dark"] .site-footer{background:#0d0c0a;color:#e8e4db}
+html[data-theme="dark"] .top-list{border-top-color:#3a362e}
+html[data-theme="dark"] .track-row{border-top-color:#2c2923}
+html[data-theme="dark"] .portrait-frame{background:#24211b;box-shadow:12px 15px 0 #8c2f21}
+html[data-theme="dark"] .list-header span{color:#9a948a}
+
+/* theme toggle button (sun/moon) */
+.theme-toggle{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:none;border:1px solid var(--line);font-size:15px;line-height:1;cursor:pointer;transition:border-color .2s,transform .3s,color .2s;color:var(--ink);flex-shrink:0}
+.theme-toggle:hover{border-color:var(--red);transform:rotate(15deg);color:var(--red)}
+.theme-toggle .tt-sun{display:none}
+html[data-theme="dark"] .theme-toggle .tt-sun{display:inline}
+html[data-theme="dark"] .theme-toggle .tt-moon{display:none}
+
+/* animated circular wipe when switching themes */
+.theme-sweep{position:fixed;inset:0;z-index:9990;background:var(--sc,#141310);clip-path:circle(0 at var(--sx,50%) var(--sy,50%));pointer-events:none;transition:clip-path .62s cubic-bezier(.4,0,.2,1),opacity .6s ease .05s}
+.theme-sweep.grow{clip-path:circle(150vmax at var(--sx,50%) var(--sy,50%))}
+.theme-sweep.fade{opacity:0}
+
+/* first-time dark mode intro toast */
+.theme-intro{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--paper);padding:12px 22px;border-radius:999px;font:11px 'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase;z-index:9995;opacity:0;transition:opacity .4s ease,transform .4s ease;pointer-events:none;box-shadow:0 8px 30px rgba(0,0,0,.25)}
+.theme-intro.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
 
 /* ==== INTRO v2: fast split-curtain reveal (no wall, no loading bar) ==== */
 .intro-overlay{background:transparent;display:block;animation:none}

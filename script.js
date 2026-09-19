@@ -478,93 +478,67 @@ syncRemoteContent();
 })();
   setTimeout(revealAll, 4000);
 })();
-// ==== Custom cursor: warm ink dot + lagging ring + soft click burst ====
-// Cozy, hand-made feel. Skipped entirely for touch devices & reduced motion.
-(function initCustomCursor() {
-  const fine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+
+// ==== Dark mode: light is ALWAYS the default & first mode ====
+// Choice is remembered, but a fresh visitor always gets the light theme.
+(function initTheme() {
+  const KEY = 'as-theme';
+  const root = document.documentElement;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!fine || reduced) return;
 
-  document.documentElement.classList.add('cc-on');
+  function isDark() { return root.getAttribute('data-theme') === 'dark'; }
 
-  const dot = document.createElement('div');
-  dot.className = 'cursor-dot';
-  const ring = document.createElement('div');
-  ring.className = 'cursor-ring';
-  document.body.appendChild(dot);
-  document.body.appendChild(ring);
-
-  // dot is snappy, ring trails behind with a soft spring feel
-  let dx = -100, dy = -100, rx = -100, ry = -100, tx = -100, ty = -100;
-  let visible = false, scale = 1, targetScale = 1;
-
-  function loop() {
-    dx += (tx - dx) * 0.55;
-    dy += (ty - dy) * 0.55;
-    rx += (tx - rx) * 0.16;
-    ry += (ty - ry) * 0.16;
-    scale += (targetScale - scale) * 0.2;
-    dot.style.transform = `translate(${dx}px, ${dy}px) translate(-50%,-50%)`;
-    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%,-50%) scale(${scale.toFixed(3)})`;
-    requestAnimationFrame(loop);
+  function syncToggles() {
+    document.querySelectorAll('.theme-toggle').forEach((btn) => {
+      btn.setAttribute('aria-pressed', isDark() ? 'true' : 'false');
+      btn.setAttribute('aria-label', isDark() ? 'Switch to light mode' : 'Switch to dark mode');
+    });
   }
-  requestAnimationFrame(loop);
 
-  window.addEventListener('pointermove', (e) => {
-    tx = e.clientX; ty = e.clientY;
-    if (!visible) {
-      visible = true;
-      dx = rx = tx; dy = ry = ty; // don't glide in from a corner
-      dot.classList.add('is-live');
-      ring.classList.add('is-live');
+  // circular wipe from the toggle button; new theme is revealed underneath
+  function sweep(x, y, toDark) {
+    const s = document.createElement('div');
+    s.className = 'theme-sweep';
+    s.style.setProperty('--sx', x + 'px');
+    s.style.setProperty('--sy', y + 'px');
+    s.style.setProperty('--sc', toDark ? '#141310' : '#f4f0e8');
+    document.body.appendChild(s);
+    requestAnimationFrame(() => requestAnimationFrame(() => s.classList.add('grow')));
+    setTimeout(() => {
+      root.setAttribute('data-theme', toDark ? 'dark' : 'light');
+      syncToggles();
+      s.classList.add('fade');
+      setTimeout(() => s.remove(), 700);
+    }, 660);
+  }
+
+  function introToast() {
+    let seen = true;
+    try { seen = localStorage.getItem(KEY + '-intro') === '1'; } catch (e) { seen = true; }
+    if (seen) return;
+    try { localStorage.setItem(KEY + '-intro', '1'); } catch (e) {}
+    const t = document.createElement('div');
+    t.className = 'theme-intro';
+    t.textContent = '☾ dark mode unlocked — tap again anytime';
+    document.body.appendChild(t);
+    requestAnimationFrame(() => t.classList.add('show'));
+    setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 500); }, 4200);
+  }
+
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.theme-toggle');
+    if (!btn) return;
+    const toDark = !isDark();
+    try { localStorage.setItem(KEY, toDark ? 'dark' : 'light'); } catch (err) {}
+    if (reduced) {
+      root.setAttribute('data-theme', toDark ? 'dark' : 'light');
+      syncToggles();
+      return;
     }
-  }, { passive: true });
-
-  // gently sleep when the cursor leaves the window
-  document.addEventListener('mouseleave', () => {
-    dot.classList.remove('is-live');
-    ring.classList.remove('is-live');
-    visible = false;
+    const r = btn.getBoundingClientRect();
+    sweep(r.left + r.width / 2, r.top + r.height / 2, toDark);
+    if (toDark) introToast();
   });
 
-  // grow into a warm halo + tiny heart over anything interactive
-  const INTERACTIVE = 'a, button, [role="button"], input, textarea, select, label, .track-row, .favourite-link, .film-card, .project-card';
-  document.addEventListener('pointerover', (e) => {
-    const hit = e.target.closest(INTERACTIVE);
-    ring.classList.toggle('is-link', !!hit);
-    dot.classList.toggle('is-link', !!hit);
-    targetScale = hit ? 1.35 : 1;
-  });
-
-  // squish on press
-  window.addEventListener('pointerdown', () => { ring.classList.add('is-down'); targetScale *= 0.8; });
-  window.addEventListener('pointerup', () => { ring.classList.remove('is-down'); targetScale = ring.classList.contains('is-link') ? 1.35 : 1; });
-
-  // soft confetti on click (kept small & tasteful)
-  const COLORS = ['#e5482e', '#f6c945', '#1d1d1b'];
-  function burst(x, y) {
-    const ringEl = document.createElement('span');
-    ringEl.className = 'burst-ring';
-    ringEl.style.left = x + 'px'; ringEl.style.top = y + 'px';
-    ringEl.style.width = ringEl.style.height = '40px';
-    document.body.appendChild(ringEl);
-    setTimeout(() => ringEl.remove(), 600);
-    for (let i = 0; i < 7; i++) {
-      const d = document.createElement('span');
-      d.className = 'burst-dot';
-      const ang = (Math.PI * 2 * i) / 7 + Math.random() * 0.5;
-      const dist = 26 + Math.random() * 26;
-      d.style.setProperty('--bx', Math.cos(ang) * dist + 'px');
-      d.style.setProperty('--by', Math.sin(ang) * dist + 'px');
-      d.style.left = x + 'px'; d.style.top = y + 'px';
-      d.style.background = COLORS[i % COLORS.length];
-      d.style.animationDelay = (i % 3) * 0.04 + 's';
-      document.body.appendChild(d);
-      setTimeout(() => d.remove(), 900);
-    }
-  }
-  window.addEventListener('pointerdown', (e) => {
-    if (e.button !== 0) return;
-    burst(e.clientX, e.clientY);
-  }, { passive: true });
+  syncToggles();
 })();
