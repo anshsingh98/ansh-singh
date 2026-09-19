@@ -72,7 +72,7 @@ const resolvePath = (obj, path) => path.split('.').reduce((o, key) => (o ? o[key
 function applyDataTexts(content) {
   document.querySelectorAll('[data-text]').forEach((el) => {
     const value = resolvePath(content, el.dataset.text);
-    if (typeof value === 'string') el.textContent = value;
+    if (typeof value === 'string') el.innerHTML = accentHtml(value);
   });
 }
 
@@ -190,15 +190,15 @@ function renderSite(content) {
 
   const pageType = document.body.dataset.page;
   if (pageType === 'favourites') {
-    document.querySelector('.subpage-hero h1').textContent = copy.favouritesHeading || 'Things I love.';
+    document.querySelector('.subpage-hero h1').innerHTML = copy.favouritesHeading ? headingHtml(copy.favouritesHeading) : 'Things I love.';
     document.querySelector('.subpage-hero .hero-intro').textContent = copy.favouritesIntro || '';
   }
   if (pageType === 'songs') {
-    document.querySelector('.subpage-hero h1').textContent = copy.songsHeading || 'Every song has a place.';
+    document.querySelector('.subpage-hero h1').innerHTML = copy.songsHeading ? headingHtml(copy.songsHeading) : 'Every song has a place.';
     document.querySelector('.subpage-hero .hero-intro').textContent = copy.songsIntro || '';
   }
   if (pageType === 'movies') {
-    document.querySelector('.subpage-hero h1').textContent = copy.moviesHeading || 'Stories I return to.';
+    document.querySelector('.subpage-hero h1').innerHTML = copy.moviesHeading ? headingHtml(copy.moviesHeading) : 'Stories I return to.';
     document.querySelector('.subpage-hero .hero-intro').textContent = copy.moviesIntro || '';
   }
 
