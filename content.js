@@ -23,7 +23,7 @@ window.siteContent = {
     "songsHeading": "My Fav Songs (playlist)",
     "workLabel": "A developer.",
     "songsIntro": "The complete list. Update the data file when a new favourite earns a spot.",
-    "homeAboutHeading": "I make apps and services you may use daily.",
+    "homeAboutHeading": "hello! i am *Ansh Singh* Welcome to my *Corner*",
     "projectsNote": "Deepika App Developers, build it fire it",
     "favouritesHeading": "Things I love.",
     "projectsLabel": "THE COMPANY / THE PROJECTS",
