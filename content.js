@@ -78,7 +78,7 @@ window.siteContent = {
     {
       "status": "Active",
       "description": "A text sharing platform with 6 digit pin, will be expanded by cloud storage.",
-      "color": "blue",
+      "color": "#f7ce2a",
       "category": "Cloud platform",
       "number": "01",
       "name": "Deep Clouds",
