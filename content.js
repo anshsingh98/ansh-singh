@@ -30,7 +30,10 @@ window.siteContent = {
     "footerHeading": "Come Back *Anytime*",
     "playlistNote": "Enjoy everything",
     "filmsNote": "Watch everything",
-    "nowplayingHeading": "hello"
+    "nowplayingHeading": "Currently planning for *Outings*",
+    "nowplayingText": "I am currently fixing the apps and doing database migration of our apps and as well as I am on a trip with friends!",
+    "connectHeading": "you can say hello *to me*",
+    "connectText": "say hello to me or get to know infromation about DAD or email the studio for PROMOTION and business enquiry."
   },
   "brand": {
     "companyName": "Deepika App Developers",
@@ -97,6 +100,15 @@ window.siteContent = {
       "link": "https://deep-ai-dp.vercel.app",
       "color": "green",
       "number": "03"
+    },
+    {
+      "name": "Deep Cast",
+      "category": "Casting app",
+      "number": "04",
+      "description": "A browser based screen sharing tool with 0 latency and free service.",
+      "status": "coming soon..",
+      "color": "red",
+      "link": "https://deep-cast.vercel.app"
     }
   ],
   "featuredSong": {
@@ -132,9 +144,9 @@ window.siteContent = {
       "mood": ""
     },
     {
-      "title": "The Winner Takes It All",
+      "title": "Mitwa Mitwa",
       "mood": "",
-      "artist": "ABBA"
+      "artist": "Shafqat Amanat Ali, Shankar Mahadevan, and Caralisa Monteiro"
     },
     {
       "title": "Ilahi",
@@ -168,7 +180,7 @@ window.siteContent = {
       "title": "Interstellar ",
       "director": "Christopher Nolen ",
       "year": "2014",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-Ex1wLqtPvhut3KGVxJWPeW1kNM7aRmjVjQAYx_lwZA&s=10"
+      "image": ""
     },
     {
       "year": "2025",
@@ -184,6 +196,18 @@ window.siteContent = {
       "year": "2025",
       "title": "Tere ishk mein",
       "director": "Anand L. Rai"
+    },
+    {
+      "title": "Maharaja",
+      "director": "Nithilan Saminathan",
+      "year": "2024",
+      "image": ""
+    },
+    {
+      "title": "Chhaavaa",
+      "director": " Laxman Utekar",
+      "year": "2025",
+      "image": ""
     }
   ]
 };
