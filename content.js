@@ -106,7 +106,7 @@ window.siteContent = {
       "description": "A browser based screen sharing tool with 0 latency and free service.",
       "number": "04",
       "category": "Casting app",
-      "link": "https://deep-cast.vercel.app",
+      "link": "https://deep-cast-dp.vercel.app",
       "color": "#65c454",
       "name": "Deep Cast",
       "status": "coming soon.."
