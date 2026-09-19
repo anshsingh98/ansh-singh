@@ -87,7 +87,7 @@ window.siteContent = {
     {
       "status": "Active",
       "category": "Conversation app",
-      "color": "234°, 67%, 64%",
+      "color": "#6571e0",
       "description": "A msging app like whatsapp, but made by me.",
       "link": "https://deep-chats.vercel.app",
       "number": "02",
