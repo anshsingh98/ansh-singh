@@ -1,6 +1,3 @@
-import { db } from '../firebase-config.js';
-import { doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
 const ADMIN_USERNAME = 'ANSHSINGH7861';
 const ADMIN_PASSWORD = 'ANSHSINGH7861923886';
 const ADMIN_SESSION_KEY = 'ansh-admin-unlocked';
@@ -99,9 +96,11 @@ function renderAll() {
 async function loadRemoteAdminContent() {
   status.textContent = 'Checking cloud for saved changes...';
   try {
-    const snap = await getDoc(doc(db, 'site', 'content'));
-    if (snap.exists()) {
-      workingContent = deepMerge(workingContent, snap.data());
+    const response = await fetch('/api/firebase-content');
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+    if (data.content) {
+      workingContent = deepMerge(workingContent, data.content);
       renderAll();
       status.textContent = 'Cloud data synced';
       status.className = 'saved-message';
@@ -154,11 +153,21 @@ async function syncContentToGithub() {
   return data.changed;
 }
 
+async function saveRemoteAdminContent() {
+  const response = await fetch('/api/firebase-content', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content: workingContent, password: ADMIN_PASSWORD })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+}
+
 document.querySelector('#save-button').addEventListener('click', async () => {
   status.textContent = 'Saving live to cloud...';
   status.className = '';
   try {
-    await setDoc(doc(db, 'site', 'content'), workingContent);
+    await saveRemoteAdminContent();
     status.textContent = 'Saved live to cloud! Syncing to GitHub...';
     try {
       const changed = await syncContentToGithub();
@@ -178,7 +187,7 @@ document.querySelector('#reset-button').addEventListener('click', async () => {
   if (!window.confirm('Reset all saved edits back to the starter content in the database?')) return;
   workingContent = JSON.parse(JSON.stringify(starterContent));
   try {
-    await setDoc(doc(db, 'site', 'content'), workingContent);
+    await saveRemoteAdminContent();
     status.textContent = 'Starter content restored on cloud! Syncing to GitHub...';
     try {
       const changed = await syncContentToGithub();

@@ -1,6 +1,3 @@
-import { db } from './firebase-config.js';
-import { doc, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
 const menuButton = document.querySelector('.menu-button');
 const nav = document.querySelector('.desktop-nav');
 
@@ -267,20 +264,16 @@ function renderSite(content) {
 renderSite(window.siteContent);
 
 // 2. Sync live content from the shared Cloud Firestore database.
-// Content is fetched on page load and re-rendered in real time whenever the
-// admin saves, so every visitor sees the same shared content.
 async function syncRemoteContent() {
   try {
-    const docRef = doc(db, 'site', 'content');
-    onSnapshot(docRef, (snap) => {
-      if (snap.exists()) {
-        window.siteContent = deepMerge(window.siteContent, snap.data());
-        renderSite(window.siteContent);
-        window.__revealRescan && window.__revealRescan();
-      }
-    }, (error) => {
-      console.warn('Firestore connection failed; using local starter content:', error);
-    });
+    const response = await fetch('/api/firebase-content');
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+    if (data.content) {
+      window.siteContent = deepMerge(window.siteContent, data.content);
+      renderSite(window.siteContent);
+      window.__revealRescan && window.__revealRescan();
+    }
   } catch (error) {
     console.warn('Firestore connection failed; using local starter content:', error);
   }
