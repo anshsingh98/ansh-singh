@@ -107,7 +107,7 @@ window.siteContent = {
       "category": "Casting app",
       "status": "coming soon..",
       "number": "04",
-      "color": "#65c454",
+      "color": "#befc03",
       "link": "https://deep-cast-dp.vercel.app",
       "name": "Deep Cast"
     },
