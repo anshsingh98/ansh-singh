@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Lost in the Clouds</title>
+    <style>
+        :root {
+            --bg-sky: #eef5fc;
+            --text-main: #6c5c77;
+            --text-muted: #9b8ba6;
+            --cloud-white: #ffffff;
+            --bubblegum: #ffb7b2;
+            --bubblegum-dark: #e09893;
+            --mint: #b5e2b8;
+            --mint-dark: #91be94;
+            --star-gold: #ffe17d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Fredoka One', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-sky);
+            background-image: 
+                radial-gradient(var(--star-gold) 10%, transparent 11%),
+                radial-gradient(var(--star-gold) 5%, transparent 6%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow: hidden;
+        }
+
+        .card {
+            text-align: center;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            padding: 50px 30px;
+            border-radius: 40px;
+            border: 6px dashed #cbdcf7;
+            position: relative;
+        }
+
+        /* The Ghost-Cat Character */
+        .character-zone {
+            height: 180px;
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .ghost-cat {
+            width: 110px;
+            height: 130px;
+            background: var(--cloud-white);
+            border-radius: 60px 60px 20px 20px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 15px 30px rgba(108, 92, 119, 0.1);
+            animation: floaty 3.5s ease-in-out infinite;
+        }
+
+        /* Cat Ears */
+        .ghost-cat::before, .ghost-cat::after {
+            content: '';
+            position: absolute;
+            top: -12px;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 20px solid var(--cloud-white);
+        }
+        .ghost-cat::before { left: 10px; transform: rotate(-15deg); }
+        .ghost-cat::after { right: 10px; transform: rotate(15deg); }
+
+        /* Ghost Ripples at Bottom */
+        .waves {
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 110px;
+            height: 20px;
+            display: flex;
+        }
+        .wave {
+            flex: 1;
+            background: var(--cloud-white);
+            border-radius: 0 0 50% 50%;
+        }
+
+        /* Happy Animating Face */
+        .face {
+            position: absolute;
+            top: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .eye {
+            width: 14px;
+            height: 14px;
+            background: var(--text-main);
+            border-radius: 50%;
+            animation: blinky 4s infinite;
+            position: relative;
+        }
+        /* Sparkle in eyes */
+        .eye::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 4px;
+            height: 4px;
+            background: white;
+            border-radius: 50%;
+        }
+        .blush {
+            position: absolute;
+            width: 16px;
+            height: 10px;
+            background: #ffcbd1;
+            border-radius: 50%;
+            top: 14px;
+        }
+        .blush.l { left: -8px; }
+        .blush.r { right: -8px; }
+
+        .mouth {
+            position: absolute;
+            top: 14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 12px;
+            height: 8px;
+            border: 3px solid var(--text-main);
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+        }
+
+        /* Wandering Stars */
+        .star {
+            position: absolute;
+            color: var(--star-gold);
+            font-size: 1.5rem;
+            animation: spinStar 6s linear infinite;
+        }
+        .star-1 { top: 20px; left: 20%; animation-delay: 0.5s; }
+        .star-2 { bottom: 30px; right: 15%; animation-delay: 1.5s; }
+
+        /* Typography */
+        .four-zero-four {
+            font-size: 4.5rem;
+            font-weight: bold;
+            color: var(--bubblegum);
+            text-shadow: 3px 3px 0px var(--cloud-white), 6px 6px 0px #ebd5db;
+            margin-bottom: 5px;
+            letter-spacing: 4px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 35px;
+            padding: 0 15px;
+        }
+
+        /* 👑 Ultra-Cute Ribbon & Cloud Style Buttons */
+        .button-box {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (min-width: 450px) {
+            .button-box {
+                flex-direction: row;
+            }
+        }
+
+        .btn-cute {
+            text-decoration: none;
+            padding: 15px 32px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            border-radius: 30px 10px 30px 10px; /* Quirky asymmetrical cuteness */
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Cloud Pill Button */
+        .btn-home {
+            background: var(--bubblegum);
+            box-shadow: 0 8px 0 var(--bubblegum-dark), 0 15px 20px rgba(255, 183, 178, 0.4);
+        }
+
+        /* Wavy Pill Button */
+        .btn-back {
+            background: var(--mint);
+            border-radius: 10px 30px 10px 30px;
+            box-shadow: 0 8px 0 var(--mint-dark), 0 15px 20px rgba(181, 226, 184, 0.4);
+            color: #4a6b4d;
+        }
+
+        .btn-cute:hover {
+            transform: translateY(-4px) scale(1.03);
+        }
+
+        .btn-cute:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+        }
+
+        /* Floating text details on hover */
+        .btn-cute::after {
+            content: '✨';
+            position: absolute;
+            top: -15px;
+            right: -10px;
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .btn-cute:hover::after {
+            opacity: 1;
+        }
+
+        /* Keyframes */
+        @keyframes floaty {
+            0%, 100% { transform: translate(-50%, -55%); }
+            50% { transform: translate(-50%, -45%); }
+        }
+
+        @keyframes blinky {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+
+        @keyframes spinStar {
+            0% { transform: rotate(0deg) scale(0.8); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(0.8); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <span class="star star-1">⭐</span>
+        <span class="star star-2">💖</span>
+
+        <div class="character-zone">
+            <div class="ghost-cat">
+                <div class="face">
+                    <div class="blush l"></div>
+                    <div class="eye"></div>
+                    <div class="mouth"></div>
+                    <div class="eye"></div>
+                    <div class="blush r"></div>
+                </div>
+                <div class="waves">
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="four-zero-four">404</div>
+        <h1>Mew-thical Page Missing!</h1>
+        <p>This little ghost-cat floated away with your link. Don't worry, it doesn't bite—it's just a bit confused! Let's get you back somewhere warm.</p>
+
+        <div class="button-box">
+            <a href="index.html" class="btn-cute btn-home">
+                🎀 Fly Home
+            </a>
+            <a href="javascript:history.back()" class="btn-cute btn-back">
+                🐾 Float Back
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>
