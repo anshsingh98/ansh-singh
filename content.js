@@ -119,6 +119,24 @@ window.siteContent = {
       "status": "Coming soon.",
       "color": "#a67474",
       "link": "https://chats-anom.vercel.app"
+    },
+    {
+      "name": "Deep Bdays",
+      "category": "Celebration",
+      "number": "06",
+      "description": "All my close poeples birthdays.",
+      "status": "Active",
+      "color": "#d17c4b",
+      "link": "https://deep-bdays.vercel.app"
+    },
+    {
+      "name": "New project",
+      "category": "New category",
+      "number": "07",
+      "description": "Describe this project.",
+      "status": "Concept / building",
+      "color": "RGB(52, 117, 49)",
+      "link": "#"
     }
   ],
   "featuredSong": {
@@ -134,14 +152,14 @@ window.siteContent = {
       "mood": ""
     },
     {
-      "title": "Arz Kiya Hai",
-      "artist": "Anuv Jain",
+      "title": "Parvati (hanuman Ansh)",
+      "artist": "Hanuman Ansh",
       "mood": ""
     },
     {
       "artist": "Anuv Jain",
       "mood": "",
-      "title": "Jo Tum Mere Ho"
+      "title": "Jo tum mere ho"
     },
     {
       "mood": "",
@@ -154,14 +172,14 @@ window.siteContent = {
       "artist": "Aasha Boshle"
     },
     {
-      "artist": "Shafqat Amanat Ali, Shankar Mahadevan, and Caralisa Monteiro",
-      "title": "Mitwa Mitwa",
+      "artist": "Hanuman Ansh",
+      "title": "Tere Bharose hanuman",
       "mood": ""
     },
     {
       "mood": "",
-      "title": "Ilahi",
-      "artist": "Arijit Singh"
+      "title": "Iluminati",
+      "artist": "Avesham"
     },
     {
       "artist": "Kishore Kumar",
@@ -218,6 +236,24 @@ window.siteContent = {
       "director": " Laxman Utekar",
       "image": "",
       "title": "Chhaavaa"
+    },
+    {
+      "title": "Hanuman Ansh",
+      "director": "Dr. Vishal Chaturvedi",
+      "year": "2026",
+      "image": ""
+    },
+    {
+      "title": "Dhurandhar: The revenge ",
+      "director": "Aditya Dhar",
+      "year": "2026",
+      "image": ""
+    },
+    {
+      "title": "Dhurandhar ",
+      "director": "Aditya Dhar",
+      "year": "2025",
+      "image": ""
     }
   ]
 };
