@@ -130,13 +130,13 @@ window.siteContent = {
       "link": "https://deep-bdays.vercel.app"
     },
     {
-      "name": "New project",
-      "category": "New category",
+      "name": "Deep calls",
+      "category": "Conversation App",
       "number": "07",
-      "description": "Describe this project.",
-      "status": "Concept / building",
+      "description": "Calling app",
+      "status": "Active",
       "color": "RGB(52, 117, 49)",
-      "link": "#"
+      "link": "https://deep-calls.vercel.app"
     }
   ],
   "featuredSong": {
