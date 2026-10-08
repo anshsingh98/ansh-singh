@@ -39,7 +39,7 @@ window.siteContent = {
   "brand": {
     "companyName": "Deepika App Developers",
     "founded": "2026",
-    "shortName": "DAD",
+    "shortName": "as",
     "description": "Deepika App Developers is Ansh Singh's independent creative technology company for building useful, curious, and slightly ambitious digital products.",
     "tagline": "Deepika App Developers build it fire it.",
     "companyEmail": "shubh99singh00@gmail.com",
