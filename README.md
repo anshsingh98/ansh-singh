@@ -1,6 +1,10 @@
 ## built the Ansh Singh's Corner 
 - in this webiste ill share my informtaion
 
+## Version
+- **Development version: 1.62.297.00** (internal build tracker)
+- Reported as a development, not a public / user-facing version.
+
 ## Admin -> GitHub sync
 When you press "Save all changes" in `/admin`, the content is saved to Firestore
 through the server-side `/api/firebase-content` Vercel function and committed to
