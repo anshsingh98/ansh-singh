@@ -30,8 +30,8 @@ window.siteContent = {
     "footerHeading": "Come Back *Anytime*",
     "playlistNote": "Enjoy everything",
     "filmsNote": "Watch everything",
-    "nowplayingHeading": "Currently planning for *Outings*",
-    "nowplayingText": "I am currently fixing the apps and doing database migration of our apps and as well as I am on a trip with friends!",
+    "nowplayingHeading": "currently *open*",
+    "nowplayingText": "currently open for business website or app creation, social media page management or any IT support ! say hello to me on whatsapp.",
     "connectHeading": "you can say hello *to me*",
     "connectText": "say hello to me or get to know infromation about DAD or email the studio for PROMOTION and business enquiry.",
     "workHeading": "Useful things,\n*made well.*"
@@ -70,6 +70,10 @@ window.siteContent = {
       {
         "title": "singer, musician",
         "details": "currently: learning Guitar"
+      },
+      {
+        "title": "App developer",
+        "details": "Android, IOS app developer - JAVA/KOTLIN "
       }
     ],
     "intro": "Hi ! I am Ansh Singh my age is 14 and I am a Developer, A dev from India. Owner of Deepika App Developers."
@@ -107,7 +111,7 @@ window.siteContent = {
       "category": "Casting app",
       "status": "coming soon..",
       "number": "04",
-      "color": "#65c454",
+      "color": "#befc03",
       "link": "https://deep-cast-dp.vercel.app",
       "name": "Deep Cast"
     },
@@ -119,6 +123,24 @@ window.siteContent = {
       "status": "Coming soon.",
       "color": "#a67474",
       "link": "https://chats-anom.vercel.app"
+    },
+    {
+      "name": "Deep Bdays",
+      "category": "Celebration",
+      "number": "06",
+      "description": "All my close poeples birthdays.",
+      "status": "Active",
+      "color": "#d17c4b",
+      "link": "https://deep-bdays.vercel.app"
+    },
+    {
+      "name": "Deep calls",
+      "category": "Conversation App",
+      "number": "07",
+      "description": "Calling app",
+      "status": "Active",
+      "color": "RGB(52, 117, 49)",
+      "link": "https://deep-calls.vercel.app"
     }
   ],
   "featuredSong": {
@@ -134,14 +156,14 @@ window.siteContent = {
       "mood": ""
     },
     {
-      "title": "Arz Kiya Hai",
-      "artist": "Anuv Jain",
+      "title": "Parvati (hanuman Ansh)",
+      "artist": "Hanuman Ansh",
       "mood": ""
     },
     {
       "artist": "Anuv Jain",
       "mood": "",
-      "title": "Jo Tum Mere Ho"
+      "title": "Jo tum mere ho"
     },
     {
       "mood": "",
@@ -154,14 +176,14 @@ window.siteContent = {
       "artist": "Aasha Boshle"
     },
     {
-      "artist": "Shafqat Amanat Ali, Shankar Mahadevan, and Caralisa Monteiro",
-      "title": "Mitwa Mitwa",
+      "artist": "Hanuman Ansh",
+      "title": "Tere Bharose hanuman",
       "mood": ""
     },
     {
       "mood": "",
-      "title": "Ilahi",
-      "artist": "Arijit Singh"
+      "title": "Iluminati",
+      "artist": "Avesham"
     },
     {
       "artist": "Kishore Kumar",
@@ -218,6 +240,24 @@ window.siteContent = {
       "director": " Laxman Utekar",
       "image": "",
       "title": "Chhaavaa"
+    },
+    {
+      "title": "Hanuman Ansh",
+      "director": "Dr. Vishal Chaturvedi",
+      "year": "2026",
+      "image": ""
+    },
+    {
+      "title": "Dhurandhar: The revenge ",
+      "director": "Aditya Dhar",
+      "year": "2026",
+      "image": ""
+    },
+    {
+      "title": "Dhurandhar ",
+      "director": "Aditya Dhar",
+      "year": "2025",
+      "image": ""
     }
   ]
 };
